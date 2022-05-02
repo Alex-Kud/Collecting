@@ -12,7 +12,7 @@ using Collecting.Data.DTO;
 
 namespace Collecting.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Produces("application/json")]
     public class CategoriesController : Controller
@@ -24,28 +24,23 @@ namespace Collecting.Controllers
             _context = context;
         }
 
-        // POST: Categories/Create
-        [HttpPost]
-        public async Task<IActionResult> Create( CategoryDTO categoryDTO)
+        // GET: Categories/All
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> All()
         {
-            Category category = new Category();
-            
-                category.Name = categoryDTO.Name;
-                category.Description = categoryDTO.Description;
-            
-
-            if (category != null)
+            var categories = await _context.CategoriesDb.ToListAsync();
+            var categoriesDto = new List<CategoryDTO>();
+            foreach (var category in categories)
             {
-                await _context.AddAsync(category);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+                categoriesDto.Add(new CategoryDTO { Id = category.Id, Name = category.Name, Description = category.Description });
             }
-            return BadRequest("Некорректные данные");
+
+            return categoriesDto;
         }
 
-        // GET: Categories/GetCategory/5
+        // GET: Categories/Category/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryDTO>> GetCategory(int? id)
+        public async Task<ActionResult<CategoryDTO>> Category(int? id)
         {
             if (id == null)
             {
@@ -63,6 +58,7 @@ namespace Collecting.Controllers
 
                 var categoryDTO = new CategoryDTO
                 {
+                    Id = category.Id,
                     Name = category.Name,
                     Description = category.Description
                 };
@@ -75,136 +71,73 @@ namespace Collecting.Controllers
             }
         }
 
-        /*
-        // GET: Categories
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.CategoriesDb.ToListAsync());
-        }
-
-        // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.CategoriesDb
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
-        }
-
-        // GET: Categories/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
         // POST: Categories/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description")] Category category)
+        public async Task<IActionResult> Create(CategoryDTO categoryDTO)
         {
-            if (ModelState.IsValid)
+            Category category = new Category();
+
+            category.Name = categoryDTO.Name;
+            category.Description = categoryDTO.Description;
+
+            if (category != null)
             {
-                _context.Add(category);
+                await _context.AddAsync(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return CreatedAtAction("GetCategory", new { id = category.Id }, category);
             }
-            return View(category);
-        }
-
-        // GET: Categories/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.CategoriesDb.FindAsync(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return View(category);
+            return BadRequest("Некорректные данные");
         }
 
         // POST: Categories/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description")] Category category)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Edit(int id, CategoryDTO categoryDto)
         {
-            if (id != category.Id)
+            if (id != categoryDto.Id || categoryDto == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            Category category = new Category
             {
-                try
+                Id = categoryDto.Id,
+                Name = categoryDto.Name,
+                Description = categoryDto.Description
+            };
+
+            try
+            {
+                _context.Update(category);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CategoryExists(category.Id))
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!CategoryExists(category.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(category);
-        }
-
-        // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
             }
 
-            var category = await _context.CategoriesDb
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
+            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
         }
 
         // POST: Categories/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
         {
             var category = await _context.CategoriesDb.FindAsync(id);
             _context.CategoriesDb.Remove(category);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return new JsonResult(new { message = "Удаление произошло успешно!" }) { StatusCode = StatusCodes.Status200OK };
         }
-
+        
         private bool CategoryExists(int id)
         {
             return _context.CategoriesDb.Any(e => e.Id == id);
-        }*/
+        }
     }
 }

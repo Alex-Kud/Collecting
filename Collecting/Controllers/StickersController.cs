@@ -14,7 +14,7 @@ using System.Configuration;
 
 namespace Collecting.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     [Produces("application/json")]
     public class StickersController : Controller
@@ -26,40 +26,71 @@ namespace Collecting.Controllers
             _context = context;
         }
 
-        // POST: Stickers/Create
-        [HttpPost]
-        public async Task<IActionResult> Create(StickerDTO stickerDTO)
-        {
-            Sticker sticker = new Sticker
-            {
-                Firm = stickerDTO.Firm,
-                Year = stickerDTO.Year,
-                Country = stickerDTO.Country,
-                Material = stickerDTO.Material,
-                Width = stickerDTO.Width,
-                Height = stickerDTO.Height,
-                Text = stickerDTO.Text,
-                Quantity = stickerDTO.Quantity,
-                Price = stickerDTO.Price,
-                Form = stickerDTO.Form,
-                Img = stickerDTO.Img,
-                AdditionalImg = stickerDTO.AdditionalImg,
-                categoryID = stickerDTO.categoryID
-            };
 
-            if (sticker != null)
+        // GET: Stickers/All
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> All()
+        {
+            var stickers = await _context.StickersDb.ToListAsync();
+            var stickersDto = new List<StickerDTO>();
+
+            foreach (var sticker in stickers)
             {
-                await _context.AddAsync(sticker);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction("GetSticker", new { id = sticker.Id }, sticker);
+                stickersDto.Add(new StickerDTO {
+                    Id = sticker.Id,
+                    Firm = sticker.Firm,
+                    Year = sticker.Year,
+                    Country = sticker.Country,
+                    Material = sticker.Material,
+                    Width = sticker.Width,
+                    Height = sticker.Height,
+                    Text = sticker.Text,
+                    Quantity = sticker.Quantity,
+                    Price = sticker.Price,
+                    Form = sticker.Form,
+                    Img = sticker.Img,
+                    AdditionalImg = sticker.AdditionalImg,
+                    categoryID = sticker.categoryID
+                });
             }
 
-            return BadRequest("Некорректные данные");
+            return stickersDto;
         }
 
-        // GET: Stickers/Details/5
+        // GET: Stickers/allincategory/id
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetSticker(int? id)
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> AllInCategory(int id)
+        {
+            var stickers = await _context.StickersDb.Where(s => s.categoryID == id).ToListAsync();
+            var stickersDto = new List<StickerDTO>();
+
+            foreach (var sticker in stickers)
+            {
+                stickersDto.Add(new StickerDTO
+                {
+                    Id = sticker.Id,
+                    Firm = sticker.Firm,
+                    Year = sticker.Year,
+                    Country = sticker.Country,
+                    Material = sticker.Material,
+                    Width = sticker.Width,
+                    Height = sticker.Height,
+                    Text = sticker.Text,
+                    Quantity = sticker.Quantity,
+                    Price = sticker.Price,
+                    Form = sticker.Form,
+                    Img = sticker.Img,
+                    AdditionalImg = sticker.AdditionalImg,
+                    categoryID = sticker.categoryID
+                });
+            }
+
+            return stickersDto;
+        }
+
+        // GET: Stickers/Sticker/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Sticker(int? id)
         {
             // Костыль. Необходимо сделать нормальное получение строки подключения к БД из файла конфигурации
             var db_options = new DbContextOptionsBuilder<StickersContext>()
@@ -87,6 +118,7 @@ namespace Collecting.Controllers
 
                 StickerDTO stickerDTO = new StickerDTO
                 {
+                    Id = sticker.Id,
                     Firm = sticker.Firm,
                     Year = sticker.Year,
                     Country = sticker.Country,
@@ -104,6 +136,7 @@ namespace Collecting.Controllers
 
                 CategoryDTO categoryDTO = new CategoryDTO
                 {
+                    Id = category.Id,
                     Name = category.Name,
                     Description = category.Description
                 };
@@ -116,149 +149,103 @@ namespace Collecting.Controllers
             {
                 return NotFound();
             }
-            
         }
 
-        /*
-        // GET: Stickers
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var stickersContext = _context.StickersDb.Include(s => s.Category);
-            return View(await stickersContext.ToListAsync());
-        }
-
-        // GET: Stickers/Details/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var sticker = await _context.StickersDb
-                .Include(s => s.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sticker == null)
-            {
-                return NotFound();
-            }
-
-            return View(sticker);
-        }
-
-        // GET: Stickers/Create
-        public IActionResult Create()
-        {
-            ViewData["categoryID"] = new SelectList(_context.CategoriesDb, "Id", "Id");
-            return View();
-        }
-        *//*
         // POST: Stickers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Firm,Year,Country,Material,Width,Height,Text,Quantity,Price,Form,Img,AdditionalImg,categoryID")] Sticker sticker)
+        public async Task<IActionResult> Create(StickerDTO stickerDTO)
         {
-            if (ModelState.IsValid)
+            Sticker sticker = new Sticker {
+                Firm = stickerDTO.Firm,
+                Year = stickerDTO.Year,
+                Country = stickerDTO.Country,
+                Material = stickerDTO.Material,
+                Width = stickerDTO.Width,
+                Height = stickerDTO.Height,
+                Text = stickerDTO.Text,
+                Quantity = stickerDTO.Quantity,
+                Price = stickerDTO.Price,
+                Form = stickerDTO.Form,
+                Img = stickerDTO.Img,
+                AdditionalImg = stickerDTO.AdditionalImg,
+                categoryID = stickerDTO.categoryID
+            };
+
+            if (sticker != null && CategoryExists(sticker.categoryID))
             {
-                _context.Add(sticker);
+                await _context.AddAsync(sticker);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["categoryID"] = new SelectList(_context.CategoriesDb, "Id", "Id", sticker.categoryID);
-            return View(sticker);
-        }
-        *//*
-        // GET: Stickers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
+                return CreatedAtAction("GetSticker", new { id = sticker.Id }, sticker);
             }
 
-            var sticker = await _context.StickersDb.FindAsync(id);
-            if (sticker == null)
-            {
-                return NotFound();
-            }
-            ViewData["categoryID"] = new SelectList(_context.CategoriesDb, "Id", "Id", sticker.categoryID);
-            return View(sticker);
+            return BadRequest("Некорректные данные");
         }
 
         // POST: Stickers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Firm,Year,Country,Material,Width,Height,Text,Quantity,Price,Form,Img,AdditionalImg,categoryID")] Sticker sticker)
+        [HttpPost("{id}")]
+        public async Task<IActionResult> Edit(int id, StickerDTO stickerDto)
         {
-            if (id != sticker.Id)
+            if (id != stickerDto.Id || stickerDto == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            Sticker sticker = new Sticker
             {
-                try
+                Id = stickerDto.Id,
+                Firm = stickerDto.Firm,
+                Year = stickerDto.Year,
+                Country = stickerDto.Country,
+                Material = stickerDto.Material,
+                Width = stickerDto.Width,
+                Height = stickerDto.Height,
+                Text = stickerDto.Text,
+                Quantity = stickerDto.Quantity,
+                Price = stickerDto.Price,
+                Form = stickerDto.Form,
+                Img = stickerDto.Img,
+                AdditionalImg = stickerDto.AdditionalImg,
+                categoryID = stickerDto.categoryID
+            };
+
+            try
+            {
+                _context.Update(sticker);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!StickerExists(sticker.Id))
                 {
-                    _context.Update(sticker);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!StickerExists(sticker.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["categoryID"] = new SelectList(_context.CategoriesDb, "Id", "Id", sticker.categoryID);
-            return View(sticker);
-        }
-
-        // GET: Stickers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
             }
 
-            var sticker = await _context.StickersDb
-                .Include(s => s.Category)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (sticker == null)
-            {
-                return NotFound();
-            }
-
-            return View(sticker);
+            return CreatedAtAction("GetSticker", new { id = sticker.Id }, sticker);
         }
 
         // POST: Stickers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
         {
             var sticker = await _context.StickersDb.FindAsync(id);
             _context.StickersDb.Remove(sticker);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return new JsonResult(new { message = "Удаление произошло успешно!" }) { StatusCode = StatusCodes.Status200OK };
         }
-
+        
         private bool StickerExists(int id)
         {
             return _context.StickersDb.Any(e => e.Id == id);
         }
-        */
+
+        private bool CategoryExists(int id)
+        {
+            return _context.CategoriesDb.Any(e => e.Id == id);
+        }
     }
 }

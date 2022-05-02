@@ -2,6 +2,8 @@
 {
     public class CategoryDTO
     {
+        // id категории
+        public int Id { set; get; }
         // Название категории
         public string Name { set; get; }
         // Описание категории

@@ -3,7 +3,7 @@
     public class StickerDTO
     {
         // id этикетки
-        //public int Id { set; get; }
+        public int Id { set; get; }
         // Фирма-производитель этикетки
         public string Firm { set; get; }
         // Год выпуска этикетки
