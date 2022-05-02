@@ -1,4 +1,6 @@
-﻿namespace Collecting.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Collecting.Models
 {
     public class Sticker
     {
@@ -30,6 +32,7 @@
         public string AdditionalImg { set; get; }
         // id категории
         public int categoryID { set; get; }
+        [JsonIgnore]
         public virtual Category Category { set; get; }
     }
 }

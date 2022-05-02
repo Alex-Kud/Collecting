@@ -1,7 +1,6 @@
 using Collecting.Data;
 using Microsoft.EntityFrameworkCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
@@ -23,9 +22,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-
-
-
 app.UseAuthorization();
 
 app.MapControllers();
@@ -45,5 +41,6 @@ app.UseDefaultFiles(new DefaultFilesOptions
 
 */
 
-app.UseStaticFiles(); 
+app.UseStaticFiles();
+
 app.Run();
