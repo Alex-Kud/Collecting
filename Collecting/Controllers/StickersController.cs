@@ -57,11 +57,14 @@ namespace Collecting.Controllers
             return stickersDto;
         }
 
-        // GET: Stickers/allincategory/id
+        // GET: Stickers/AllInCategory/id
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> AllInCategory(int id)
         {
-            var stickers = await _context.StickersDb.Where(s => s.categoryID == id).ToListAsync();
+            var stickers = await _context.StickersDb
+                .Where(s => s.categoryID == id)
+                .ToListAsync();
+
             var stickersDto = new List<StickerDTO>();
 
             foreach (var sticker in stickers)
@@ -86,6 +89,51 @@ namespace Collecting.Controllers
             }
 
             return stickersDto;
+        }
+
+        // GET: Stickers/Page/{CurrentPage}/{PageSize}
+        [Route("{CurrentPage}/{PageSize}")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> Page(int CurrentPage, int PageSize)
+        {
+            if (CurrentPage <= 0 || PageSize <= 0)
+            {
+                return BadRequest("Некорректные данные");
+            }
+
+            decimal Quantity = await _context.StickersDb.CountAsync();
+            int MaxPage = (int)Math.Ceiling(Quantity / PageSize);
+            CurrentPage = CurrentPage > MaxPage ? MaxPage : CurrentPage;
+
+            var stickers = _context.StickersDb
+                .OrderBy(s => s.Id)
+                .Skip((CurrentPage - 1) * PageSize)
+                .Take(PageSize);
+
+            var StickersDto = new List<StickerDTO>();
+
+            foreach (var sticker in stickers)
+            {
+                StickersDto.Add(new StickerDTO
+                {
+                    Id = sticker.Id,
+                    Firm = sticker.Firm,
+                    Year = sticker.Year,
+                    Country = sticker.Country,
+                    Material = sticker.Material,
+                    Width = sticker.Width,
+                    Height = sticker.Height,
+                    Text = sticker.Text,
+                    Quantity = sticker.Quantity,
+                    Price = sticker.Price,
+                    Form = sticker.Form,
+                    Img = sticker.Img,
+                    AdditionalImg = sticker.AdditionalImg,
+                    categoryID = sticker.categoryID
+                });
+            }
+
+            return StickersDto;
         }
 
         // GET: Stickers/Sticker/5
