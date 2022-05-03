@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Collecting.Models
+namespace Collecting.Data.Models
 {
     public class Category
     {

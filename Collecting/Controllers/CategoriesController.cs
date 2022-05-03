@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
-using Collecting.Models;
 using Collecting.Data.DTO;
+using Collecting.Data.Models;
 
 namespace Collecting.Controllers
 {
@@ -65,7 +65,7 @@ namespace Collecting.Controllers
 
                 return categoryDTO;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -75,16 +75,17 @@ namespace Collecting.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CategoryDTO categoryDTO)
         {
-            Category category = new Category();
-
-            category.Name = categoryDTO.Name;
-            category.Description = categoryDTO.Description;
+            Category category = new()
+            {
+                Name = categoryDTO.Name,
+                Description = categoryDTO.Description
+            };
 
             if (category != null)
             {
                 await _context.AddAsync(category);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+                return CreatedAtAction("Category", new { id = category.Id }, category);
             }
             return BadRequest("Некорректные данные");
         }
@@ -98,7 +99,7 @@ namespace Collecting.Controllers
                 return NotFound();
             }
 
-            Category category = new Category
+            Category category = new()
             {
                 Id = categoryDto.Id,
                 Name = categoryDto.Name,
@@ -122,7 +123,7 @@ namespace Collecting.Controllers
                 }
             }
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            return CreatedAtAction("Category", new { id = category.Id }, category);
         }
 
         // POST: Categories/Delete/5

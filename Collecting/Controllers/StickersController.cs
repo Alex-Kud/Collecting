@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
-using Collecting.Models;
 using Collecting.Data.DTO;
 using Newtonsoft.Json;
 using System.Configuration;
+using Collecting.Data.Models;
 
 namespace Collecting.Controllers
 {
@@ -50,7 +50,7 @@ namespace Collecting.Controllers
                     Form = sticker.Form,
                     Img = sticker.Img,
                     AdditionalImg = sticker.AdditionalImg,
-                    categoryID = sticker.categoryID
+                    CategoryID = sticker.CategoryID
                 });
             }
 
@@ -62,7 +62,7 @@ namespace Collecting.Controllers
         public async Task<ActionResult<IEnumerable<StickerDTO>>> AllInCategory(int id)
         {
             var stickers = await _context.StickersDb
-                .Where(s => s.categoryID == id)
+                .Where(s => s.CategoryID == id)
                 .ToListAsync();
 
             var stickersDto = new List<StickerDTO>();
@@ -84,7 +84,7 @@ namespace Collecting.Controllers
                     Form = sticker.Form,
                     Img = sticker.Img,
                     AdditionalImg = sticker.AdditionalImg,
-                    categoryID = sticker.categoryID
+                    CategoryID = sticker.CategoryID
                 });
             }
 
@@ -129,7 +129,7 @@ namespace Collecting.Controllers
                     Form = sticker.Form,
                     Img = sticker.Img,
                     AdditionalImg = sticker.AdditionalImg,
-                    categoryID = sticker.categoryID
+                    CategoryID = sticker.CategoryID
                 });
             }
 
@@ -140,23 +140,29 @@ namespace Collecting.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Sticker(int? id)
         {
+            /*var temp = _context.StickersDb.ToList();
+            foreach (var sticker in temp)
+            {
+                _context.StickersDb.Remove(sticker);
+            }
+
             // Костыль. Необходимо сделать нормальное получение строки подключения к БД из файла конфигурации
             var db_options = new DbContextOptionsBuilder<StickersContext>()
                 .UseSqlServer("Server = (localdb)\\mssqllocaldb; Database = Collection; Trusted_Connection = True; MultipleActiveResultSets = true")
                 .Options;
             StickersContext context = new StickersContext(db_options);
-
+            */
             if (id == null)
             {
                 return NotFound();
             }
             try
             {
-                var sticker = await context.StickersDb
+                var sticker = await _context.StickersDb
                     .FirstOrDefaultAsync(m => m.Id == id);
 
                 var category = await _context.CategoriesDb.
-                    Where(c => c.Id == sticker.categoryID).
+                    Where(c => c.Id == sticker.CategoryID).
                     FirstOrDefaultAsync();
 
                 if (sticker == null || category == null)
@@ -164,7 +170,7 @@ namespace Collecting.Controllers
                     return BadRequest("Наклейка не найдена");
                 }
 
-                StickerDTO stickerDTO = new StickerDTO
+                StickerDTO stickerDTO = new() 
                 {
                     Id = sticker.Id,
                     Firm = sticker.Firm,
@@ -179,10 +185,10 @@ namespace Collecting.Controllers
                     Form = sticker.Form,
                     Img = sticker.Img,
                     AdditionalImg = sticker.AdditionalImg,
-                    categoryID = sticker.categoryID
+                    CategoryID = sticker.CategoryID
                 };
 
-                CategoryDTO categoryDTO = new CategoryDTO
+                CategoryDTO categoryDTO = new()
                 {
                     Id = category.Id,
                     Name = category.Name,
@@ -193,7 +199,7 @@ namespace Collecting.Controllers
 
                 return Content(answer, "application/json");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return NotFound();
             }
@@ -203,7 +209,7 @@ namespace Collecting.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(StickerDTO stickerDTO)
         {
-            Sticker sticker = new Sticker {
+            Sticker sticker = new() {
                 Firm = stickerDTO.Firm,
                 Year = stickerDTO.Year,
                 Country = stickerDTO.Country,
@@ -216,14 +222,14 @@ namespace Collecting.Controllers
                 Form = stickerDTO.Form,
                 Img = stickerDTO.Img,
                 AdditionalImg = stickerDTO.AdditionalImg,
-                categoryID = stickerDTO.categoryID
+                CategoryID = stickerDTO.CategoryID
             };
 
-            if (sticker != null && CategoryExists(sticker.categoryID))
+            if (sticker != null && CategoryExists(sticker.CategoryID))
             {
                 await _context.AddAsync(sticker);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetSticker", new { id = sticker.Id }, sticker);
+                return CreatedAtAction("Sticker", new { id = sticker.Id }, sticker);
             }
 
             return BadRequest("Некорректные данные");
@@ -238,7 +244,7 @@ namespace Collecting.Controllers
                 return NotFound();
             }
 
-            Sticker sticker = new Sticker
+            Sticker sticker = new()
             {
                 Id = stickerDto.Id,
                 Firm = stickerDto.Firm,
@@ -253,7 +259,7 @@ namespace Collecting.Controllers
                 Form = stickerDto.Form,
                 Img = stickerDto.Img,
                 AdditionalImg = stickerDto.AdditionalImg,
-                categoryID = stickerDto.categoryID
+                CategoryID = stickerDto.CategoryID
             };
 
             try
@@ -273,7 +279,7 @@ namespace Collecting.Controllers
                 }
             }
 
-            return CreatedAtAction("GetSticker", new { id = sticker.Id }, sticker);
+            return CreatedAtAction("Sticker", new { id = sticker.Id }, sticker);
         }
 
         // POST: Stickers/Delete/5

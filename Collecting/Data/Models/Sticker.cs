@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Collecting.Models
+namespace Collecting.Data.Models
 {
     public class Sticker
     {
@@ -19,7 +19,7 @@ namespace Collecting.Models
         // Высота этикетки
         public int Height { set; get; }
         // Текст этикетки
-        public int Text { set; get; }
+        public string Text { set; get; }
         // Количество дубликатов
         public int Quantity { set; get; }
         // Стоимость этикетки
@@ -31,7 +31,7 @@ namespace Collecting.Models
         // Ссылка на изображение
         public string AdditionalImg { set; get; }
         // id категории
-        public int categoryID { set; get; }
+        public int CategoryID { set; get; }
         [JsonIgnore]
         public virtual Category Category { set; get; }
     }

@@ -17,7 +17,7 @@
         // Высота этикетки
         public int Height { set; get; }
         // Текст этикетки
-        public int Text { set; get; }
+        public string Text { set; get; }
         // Количество дубликатов
         public int Quantity { set; get; }
         // Стоимость этикетки
@@ -29,6 +29,6 @@
         // Ссылка на изображение
         public string AdditionalImg { set; get; }
         // id категории
-        public int categoryID { set; get; }
+        public int CategoryID { set; get; }
     }
 }
