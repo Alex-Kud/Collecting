@@ -34,7 +34,7 @@ namespace Collecting.Controllers
                 .Include(c => c.Sticker)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (cartItem == null)
+            if (cartItem == null || cartItem == default)
             {
                 return NotFound();
             }
@@ -59,11 +59,17 @@ namespace Collecting.Controllers
                 .Where(s => s.StickerId == StickerId && s.CartId == user.CartId)
                 .FirstOrDefaultAsync();
 
-            if (cartItem == null)
+            if (cartItem == null || cartItem == default)
             {
                 var tempSticker = await _context.StickersDb
-                                    .Where(s => s.Id == StickerId)
-                                    .FirstOrDefaultAsync();
+                    .Where(s => s.Id == StickerId)
+                    .FirstOrDefaultAsync();
+
+                if (tempSticker == null || tempSticker == default)
+                {
+                    return BadRequest("Наклейка не найдена");
+                }
+
                 cartItem = new()
                 {
                     Quantity = Quantity,

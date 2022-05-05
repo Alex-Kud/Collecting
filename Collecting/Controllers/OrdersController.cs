@@ -49,7 +49,7 @@ namespace Collecting.Controllers
                 .Include(o => o.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (order == null)
+            if (order == null || order == default)
             {
                 return NotFound();
             }

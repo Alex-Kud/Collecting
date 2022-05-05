@@ -29,7 +29,11 @@ namespace Collecting.Controllers
             var categoriesDto = new List<CategoryDTO>();
             foreach (var category in categories)
             {
-                categoriesDto.Add(new CategoryDTO { Id = category.Id, Name = category.Name, Description = category.Description });
+                categoriesDto.Add(new CategoryDTO {
+                    Id = category.Id, 
+                    Name = category.Name, 
+                    Description = category.Description 
+                });
             }
 
             return categoriesDto;
@@ -48,7 +52,7 @@ namespace Collecting.Controllers
                 var category = await _context.CategoriesDb
                     .FirstOrDefaultAsync(m => m.Id == id);
 
-                if (category == null)
+                if (category == null || category == default)
                 {
                     return NotFound();
                 }

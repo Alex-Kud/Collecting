@@ -87,30 +87,30 @@ namespace Collecting.Controllers
             return stickersDto;
         }
 
-        // GET: Stickers/Page/{CurrentPage}/{PageSize}
-        [Route("{CurrentPage}/{PageSize}")]
+        // GET: Stickers/Page/{currentPage}/{pageSize}
+        [Route("{currentPage}/{pageSize}")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StickerDTO>>> Page(int CurrentPage, int PageSize)
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> Page(int currentPage, int pageSize)
         {
-            if (CurrentPage <= 0 || PageSize <= 0)
+            if (currentPage <= 0 || pageSize <= 0)
             {
                 return BadRequest("Некорректные данные");
             }
 
-            decimal Quantity = await _context.StickersDb.CountAsync();
-            int MaxPage = (int)Math.Ceiling(Quantity / PageSize);
-            CurrentPage = CurrentPage > MaxPage ? MaxPage : CurrentPage;
+            decimal quantity = await _context.StickersDb.CountAsync();
+            int MaxPage = (int)Math.Ceiling(quantity / pageSize);
+            currentPage = currentPage > MaxPage ? MaxPage : currentPage;
 
             var stickers = _context.StickersDb
                 .OrderBy(s => s.Id)
-                .Skip((CurrentPage - 1) * PageSize)
-                .Take(PageSize);
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize);
 
-            var StickersDto = new List<StickerDTO>();
+            var stickersDto = new List<StickerDTO>();
 
             foreach (var sticker in stickers)
             {
-                StickersDto.Add(new StickerDTO
+                stickersDto.Add(new StickerDTO
                 {
                     Id = sticker.Id,
                     Firm = sticker.Firm,
@@ -129,7 +129,7 @@ namespace Collecting.Controllers
                 });
             }
 
-            return StickersDto;
+            return stickersDto;
         }
 
         // GET: Stickers/Sticker/5
@@ -239,6 +239,11 @@ namespace Collecting.Controllers
             if (id != stickerDto.Id || stickerDto == null)
             {
                 return NotFound();
+            }
+
+            if (!CategoryExists(stickerDto.CategoryID))
+            {
+                return BadRequest("Категория не существует");
             }
 
             Sticker sticker = new()

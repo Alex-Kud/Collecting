@@ -42,7 +42,7 @@ namespace Collecting.Controllers
             var user = await _context.UsersDb
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (user == null)
+            if (user == null || user == default)
             {
                 return NotFound();
             }
@@ -85,7 +85,7 @@ namespace Collecting.Controllers
             var user = await _context.UsersDb
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (user == null)
+            if (user == null || user == default)
             {
                 return NotFound();
             }
