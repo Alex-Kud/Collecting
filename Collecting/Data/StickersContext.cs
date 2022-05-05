@@ -10,6 +10,7 @@ namespace Collecting.Data
         public DbSet<User> UsersDb { get; set; }
         public DbSet<CartItem> CartItemsDb { get; set; }
         public DbSet<Cart> CartsDb { get; set; }
+        public DbSet<Order> OrdersDb { get; set; }
         public StickersContext(DbContextOptions<StickersContext> options)
             : base(options)
         {
