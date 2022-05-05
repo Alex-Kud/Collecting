@@ -52,17 +52,53 @@ namespace Collecting.Controllers
 
         // POST: Users/Create
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,Name,Surname,Country,Address,Index,Email,Password,Role,CartId")] User user)
+        public async Task<IActionResult> Create(User user)
         {
             if (user == null)
             {
                 return BadRequest("Некорректные данные");
             }
+
+            Cart cart = new()
+            {
+                UserId = user.Id,
+            };
+            await _context.CartsDb.AddAsync(cart);
+            await _context.SaveChangesAsync();
+            user.CartId = cart.Id;
+
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("User", new { id = user.Id }, user);
         }
+
+        // DELETE: Users/Delete/5
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.UsersDb
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.UsersDb.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new { message = "Удаление пользователя произошло успешно!" })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+        }
+
 
         /*
         // GET: Users/Edit/5
@@ -82,8 +118,6 @@ namespace Collecting.Controllers
         }
 
         // POST: Users/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Surname,Country,Address,Index,Email,Password,Role,CartId")] User user)
@@ -114,35 +148,6 @@ namespace Collecting.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
-        }
-
-        // GET: Users/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _context.UsersDb
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return View(user);
-        }
-
-        // POST: Users/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var user = await _context.UsersDb.FindAsync(id);
-            _context.UsersDb.Remove(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
         }
 
         private bool UserExists(int id)

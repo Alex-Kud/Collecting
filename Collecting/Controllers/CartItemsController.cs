@@ -3,12 +3,13 @@ using Collecting.Data;
 using Collecting.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Collecting.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
     [Produces("application/json")]
+    [Route("api/[controller]/[action]")]
     public class CartItemsController : Controller
     {
         private readonly StickersContext _context;
@@ -37,7 +38,9 @@ namespace Collecting.Controllers
             {
                 return NotFound();
             }
-
+            /*
+            var answer = '[' + JsonConvert.SerializeObject(cartItem) + $",\"UnitPrice\":{cartItem.UnitPrice},\"TotalPrice\":{cartItem.TotalPrice}]";
+            return Content(answer, "application/json");*/
             return cartItem;
         }
 
@@ -79,8 +82,8 @@ namespace Collecting.Controllers
             return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 
-        // POST: CartItems/Delete/5
-        [HttpPost("{id}")]
+        // DELETE: CartItems/Delete/5
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -97,7 +100,10 @@ namespace Collecting.Controllers
 
             _context.CartItemsDb.Remove(cartItem);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
+            return new JsonResult(new { message = "Удаление элемента корзины произошло успешно!" })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
         }
 
 

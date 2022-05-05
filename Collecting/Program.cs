@@ -1,7 +1,7 @@
 using Collecting.Data;
+using Collecting.Middleware;
 using Collecting.Services.Implimentations;
 using Collecting.Services.Interfaces;
-using Games.Middleware;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

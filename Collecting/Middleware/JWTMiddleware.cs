@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Games.Middleware
+namespace Collecting.Middleware
 {
     public class JWTMiddleware
     {
@@ -61,7 +61,7 @@ namespace Games.Middleware
             }
             catch
             {
-                
+
                 // Ничего не делать, если проверка jwt завершается неудачей
                 // Учетная запись не привязана к контексту, поэтому запрос не будет иметь доступа к защищенным маршрутам
             }

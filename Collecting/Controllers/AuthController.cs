@@ -7,7 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Games.Controllers
+namespace Collecting.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

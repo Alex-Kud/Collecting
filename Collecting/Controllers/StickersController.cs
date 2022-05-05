@@ -279,7 +279,7 @@ namespace Collecting.Controllers
             return CreatedAtAction("Sticker", new { id = sticker.Id }, sticker);
         }
 
-        // POST: Stickers/Delete/5
+        // Delete: Stickers/Delete/5
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {

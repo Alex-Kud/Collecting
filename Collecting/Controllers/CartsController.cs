@@ -1,75 +1,28 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
 using Collecting.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Collecting.Controllers
 {
+    [ApiController]
+    [Produces("application/json")]
+    [Route("api/[controller]/[action]")]
     public class CartsController : Controller
     {
         private readonly StickersContext _context;
+        private readonly User _user;
 
-        public CartsController(StickersContext context)
+        public CartsController(StickersContext context, HttpContext contextHttp)
         {
             _context = context;
+            _user = (User) contextHttp.Items["User"];
         }
         
-
-        /*
-        // GET: Carts
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.CartsDb.ToListAsync());
-        }
-
-        // GET: Carts/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var cart = await _context.CartsDb
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cart == null)
-            {
-                return NotFound();
-            }
-
-            return View(cart);
-        }
-
-        // GET: Carts/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Carts/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId")] Cart cart)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(cart);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cart);
-        }
-
-        // GET: Carts/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // GET: Carts/Cart/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Cart>> Cart(int? id)
         {
             if (id == null)
             {
@@ -77,80 +30,96 @@ namespace Collecting.Controllers
             }
 
             var cart = await _context.CartsDb.FindAsync(id);
+
             if (cart == null)
             {
                 return NotFound();
             }
-            return View(cart);
+
+            var items = await _context.CartItemsDb
+                .Where(i => i.CartId == id)
+                .ToListAsync();
+            cart.Items = items;
+
+            return cart;
         }
 
-        // POST: Carts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId")] Cart cart)
-        {
-            if (id != cart.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cart);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CartExists(cart.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cart);
-        }
-
-        // GET: Carts/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Carts/TotalPrice/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> TotalPrice(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var cart = await _context.CartsDb
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cart == null)
+            var items = await _context.CartItemsDb
+                .Where(i => i.CartId == id)
+                .ToListAsync();
+
+            decimal total = items.Sum(i => i.TotalPrice);
+
+            return new JsonResult(new { price = total })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+        }
+
+        // GET: Carts/Quantity/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult> Quantity(int? id)
+        {
+            if (id == null)
             {
                 return NotFound();
             }
 
-            return View(cart);
+            var items = await _context.CartItemsDb
+                .Where(i => i.CartId == id)
+                .ToListAsync();
+
+            return new JsonResult(new { quantity = items.Count })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
         }
 
-        // POST: Carts/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        // GET: Carts/CartUser
+        [HttpGet]
+        public async Task<ActionResult<Cart>> CartUser()
         {
-            var cart = await _context.CartsDb.FindAsync(id);
-            _context.CartsDb.Remove(cart);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (_user == null)
+            {
+                return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            }
+
+            return await Cart(_user.CartId);
         }
 
-        private bool CartExists(int id)
+        // GET: Carts/TotalPriceUser
+        [HttpGet]
+        public async Task<ActionResult> TotalPriceUser()
         {
-            return _context.CartsDb.Any(e => e.Id == id);
-        }*/
+            if (_user == null)
+            {
+                return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            }
+
+            return await TotalPrice(_user.CartId);
+        }
+
+        // GET: Carts/QuantityUser
+        [HttpGet]
+        public async Task<ActionResult> QuantityUser()
+        {
+            
+            if (_user == null)
+            {
+                return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            }
+
+            return await TotalPrice(_user.CartId);
+
+        }
     }
 }
