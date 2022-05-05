@@ -70,7 +70,7 @@ namespace Collecting.Controllers
                 var tempCart = await _context.CartsDb.FindAsync(_user.CartId);
                 if (tempCart == null)
                 {
-                    return BadRequest("Корзина пользователя не найдена");
+                    return NotFound();
                 }
                 Order order = new()
                 {
@@ -107,44 +107,22 @@ namespace Collecting.Controllers
             }           
         }
 
-        // DELETE: Orders/Delete/5
-        [HttpDelete]
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return BadRequest("Заказ не найден");
-            }
-
-            var order = await _context.OrdersDb.FindAsync(id);
-            if (order == null)
-            {
-                return BadRequest("Заказ не найден");
-            }
-            _context.OrdersDb.Remove(order);
-            await _context.SaveChangesAsync();
-
-            return new JsonResult(new { message = "Удаление заказа произошло успешно!" })
-            {
-                StatusCode = StatusCodes.Status200OK
-            };
-        }
-
         // Put: Orders/ChangeStatus/{id}/{newStatus}
         [HttpPut]
         [Route("{id}/{newStatus}")]
         public async Task<IActionResult> ChangeStatus(int? id, OrderStatus newStatus)
         {
-            if (id == null)
+            if (id == null || !Enum.IsDefined(typeof(OrderStatus), newStatus))
             {
-                return BadRequest("Заказ не найден");
+                return NotFound();
             }
+
             try
             {
                 Order order = await _context.OrdersDb.FindAsync(id);
                 if (order == null)
                 {
-                    return BadRequest("Заказ не найден");
+                    return NotFound();
                 }
                 order.Status = newStatus;
                 _context.OrdersDb.Update(order);
@@ -156,6 +134,29 @@ namespace Collecting.Controllers
             {
                 return BadRequest("Некорректный статус");
             }
+        }
+
+        // DELETE: Orders/Delete/5
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _context.OrdersDb.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+            _context.OrdersDb.Remove(order);
+            await _context.SaveChangesAsync();
+
+            return new JsonResult(new { message = "Удаление заказа произошло успешно!" })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
         }
     }
 }

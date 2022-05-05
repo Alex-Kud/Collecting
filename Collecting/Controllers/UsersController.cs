@@ -70,7 +70,36 @@ namespace Collecting.Controllers
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("User", new { id = user.Id }, user);
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+        }
+
+        // Put: Users/ChangeRole/{id}/{newRole}
+        [HttpPut]
+        [Route("{id}/{newRole}")]
+        public async Task<IActionResult> ChangeRole(int? id, Roles newRole)
+        {
+            if (id == null || !Enum.IsDefined(typeof(Roles), newRole))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                User user = await _context.UsersDb.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+                user.Role = newRole;
+                _context.UsersDb.Update(user);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Некорректная роль");
+            }
         }
 
         // DELETE: Users/Delete/5
@@ -82,10 +111,8 @@ namespace Collecting.Controllers
                 return NotFound();
             }
 
-            var user = await _context.UsersDb
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (user == null || user == default)
+            var user = await _context.UsersDb.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
