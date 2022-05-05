@@ -15,6 +15,5 @@
         public int StickerId { get; set; }
         public Sticker Sticker { get; set; }
         public int CartId { get; set; }
-        public Cart Cart { get; set; }
     }
 }

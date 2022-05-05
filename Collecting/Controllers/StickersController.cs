@@ -11,6 +11,7 @@ using Collecting.Data.DTO;
 using Newtonsoft.Json;
 using System.Configuration;
 using Collecting.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Collecting.Controllers
 {
@@ -29,6 +30,7 @@ namespace Collecting.Controllers
 
         // GET: Stickers/All
         [HttpGet]
+        [Authorize(Roles = "User, Admin")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> All()
         {
             var stickers = await _context.StickersDb.ToListAsync();

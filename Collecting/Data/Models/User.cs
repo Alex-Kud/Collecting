@@ -9,6 +9,7 @@
         public string Address { get; set; }
         public string Index { get; set; }
         public string Email { get; set; }
+        public string Password { get; set; }
         public Roles Role { get; set; }
         public int CartId { get; set; }
     }

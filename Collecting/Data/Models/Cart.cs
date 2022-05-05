@@ -8,7 +8,7 @@ namespace Collecting.Data.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         private List<CartItem> _itemsCollection = new();
-        public IEnumerable<CartItem> Lines
+        public IEnumerable<CartItem> Items
         {
             get { return _itemsCollection; }
         }

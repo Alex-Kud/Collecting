@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
 using Collecting.Data.DTO;
 using Collecting.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Collecting.Controllers
 {
@@ -26,6 +27,7 @@ namespace Collecting.Controllers
 
         // GET: Categories/All
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<CategoryDTO>>> All()
         {
             var categories = await _context.CategoriesDb.ToListAsync();
