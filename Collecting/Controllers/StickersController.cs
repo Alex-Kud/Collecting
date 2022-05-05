@@ -281,9 +281,17 @@ namespace Collecting.Controllers
 
         // Delete: Stickers/Delete/5
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
+            if (id == null)
+            {
+                return BadRequest("Наклейка не найдена");
+            }
             var sticker = await _context.StickersDb.FindAsync(id);
+            if (sticker == null)
+            {
+                return BadRequest("Наклейка не найдена");
+            }
             _context.StickersDb.Remove(sticker);
             await _context.SaveChangesAsync();
             return new JsonResult(new { message = "Удаление произошло успешно!" }) { 

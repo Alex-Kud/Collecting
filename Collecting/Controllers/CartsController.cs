@@ -112,7 +112,6 @@ namespace Collecting.Controllers
         [HttpGet]
         public async Task<ActionResult> QuantityUser()
         {
-            
             if (_user == null)
             {
                 return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };

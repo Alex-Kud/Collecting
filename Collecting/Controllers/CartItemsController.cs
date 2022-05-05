@@ -61,13 +61,14 @@ namespace Collecting.Controllers
 
             if (cartItem == null)
             {
+                var tempSticker = await _context.StickersDb
+                                    .Where(s => s.Id == StickerId)
+                                    .FirstOrDefaultAsync();
                 cartItem = new()
                 {
                     Quantity = Quantity,
                     StickerId = StickerId,
-                    Sticker = await _context.StickersDb
-                        .Where(s => s.Id == StickerId)
-                        .FirstOrDefaultAsync(),
+                    Sticker = tempSticker,
                     CartId = user.CartId
                 };
                 _context.Add(CartItem);

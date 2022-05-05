@@ -125,12 +125,20 @@ namespace Collecting.Controllers
 
         // POST: Categories/Delete/5
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int? id)
         {
+            if (id == null)
+            {
+                return BadRequest("Категория не найдена");
+            }
             var category = await _context.CategoriesDb.FindAsync(id);
+            if (category == null)
+            {
+                return BadRequest("Категория не найдена");
+            }
             _context.CategoriesDb.Remove(category);
             await _context.SaveChangesAsync();
-            return new JsonResult(new { message = "Удаление произошло успешно!" }) { StatusCode = StatusCodes.Status200OK };
+            return new JsonResult(new { message = "Удаление категории произошло успешно!" }) { StatusCode = StatusCodes.Status200OK };
         }
 
         private bool CategoryExists(int id) => _context.CategoriesDb.Any(e => e.Id == id);
