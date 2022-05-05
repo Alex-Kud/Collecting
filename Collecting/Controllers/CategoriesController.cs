@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Collecting.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
     [Produces("application/json")]
+    [Route("api/[controller]/[action]")]
     public class CategoriesController : Controller
     {
         private readonly StickersContext _context;
@@ -137,10 +137,7 @@ namespace Collecting.Controllers
             await _context.SaveChangesAsync();
             return new JsonResult(new { message = "Удаление произошло успешно!" }) { StatusCode = StatusCodes.Status200OK };
         }
-        
-        private bool CategoryExists(int id)
-        {
-            return _context.CategoriesDb.Any(e => e.Id == id);
-        }
+
+        private bool CategoryExists(int id) => _context.CategoriesDb.Any(e => e.Id == id);
     }
 }

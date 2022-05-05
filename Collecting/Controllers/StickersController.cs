@@ -1,23 +1,17 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
 using Collecting.Data.DTO;
-using Newtonsoft.Json;
-using System.Configuration;
 using Collecting.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Collecting.Controllers
 {
-    [Route("api/[controller]/[action]")]
     [ApiController]
     [Produces("application/json")]
+    [Route("api/[controller]/[action]")]
     public class StickersController : Controller
     {
         private readonly StickersContext _context;
@@ -26,7 +20,6 @@ namespace Collecting.Controllers
         {
             _context = context;
         }
-
 
         // GET: Stickers/All
         [HttpGet]
@@ -38,7 +31,8 @@ namespace Collecting.Controllers
 
             foreach (var sticker in stickers)
             {
-                stickersDto.Add(new StickerDTO {
+                stickersDto.Add(new StickerDTO
+                {
                     Id = sticker.Id,
                     Firm = sticker.Firm,
                     Year = sticker.Year,
@@ -172,7 +166,7 @@ namespace Collecting.Controllers
                     return BadRequest("Наклейка не найдена");
                 }
 
-                StickerDTO stickerDTO = new() 
+                StickerDTO stickerDTO = new()
                 {
                     Id = sticker.Id,
                     Firm = sticker.Firm,
@@ -211,7 +205,8 @@ namespace Collecting.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(StickerDTO stickerDTO)
         {
-            Sticker sticker = new() {
+            Sticker sticker = new()
+            {
                 Firm = stickerDTO.Firm,
                 Year = stickerDTO.Year,
                 Country = stickerDTO.Country,
@@ -291,17 +286,13 @@ namespace Collecting.Controllers
             var sticker = await _context.StickersDb.FindAsync(id);
             _context.StickersDb.Remove(sticker);
             await _context.SaveChangesAsync();
-            return new JsonResult(new { message = "Удаление произошло успешно!" }) { StatusCode = StatusCodes.Status200OK };
-        }
-        
-        private bool StickerExists(int id)
-        {
-            return _context.StickersDb.Any(e => e.Id == id);
+            return new JsonResult(new { message = "Удаление произошло успешно!" }) { 
+                StatusCode = StatusCodes.Status200OK 
+            };
         }
 
-        private bool CategoryExists(int id)
-        {
-            return _context.CategoriesDb.Any(e => e.Id == id);
-        }
+        private bool StickerExists(int id) => _context.StickersDb.Any(e => e.Id == id);
+
+        private bool CategoryExists(int id) => _context.CategoriesDb.Any(e => e.Id == id);
     }
 }

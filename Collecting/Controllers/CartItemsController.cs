@@ -1,13 +1,8 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
 using Collecting.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Collecting.Controllers
 {
@@ -51,24 +46,37 @@ namespace Collecting.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int StickerId, int Quantity)
         {
-            var user = _contextHttp.Items["User"];
+            User user = (User)_contextHttp.Items["User"];
             if (user == null)
             {
                 return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
 
-            //CartItem current = await _context.CartItemsDb.Where(s => s.StickerId == StickerId && s.CartId = cartId).FirstOrDefaultAsync();
-            CartItem CartItem = new()
-            {
-                Quantity = Quantity,
-                StickerId = StickerId,
-                Sticker = await _context.StickersDb.Where(s => s.Id == StickerId).FirstOrDefaultAsync()
-                // CartId берем из сессии по авторизованному пользователю
-            };
+            CartItem cartItem = await _context.CartItemsDb
+                .Where(s => s.StickerId == StickerId && s.CartId == user.CartId)
+                .FirstOrDefaultAsync();
 
-            _context.Add(CartItem);
+            if (cartItem == null)
+            {
+                cartItem = new()
+                {
+                    Quantity = Quantity,
+                    StickerId = StickerId,
+                    Sticker = await _context.StickersDb
+                        .Where(s => s.Id == StickerId)
+                        .FirstOrDefaultAsync(),
+                    CartId = user.CartId
+                };
+                _context.Add(CartItem);
+            }
+            else
+            {
+                cartItem.Quantity += Quantity;
+                _context.Update(cartItem);
+            }
+
             await _context.SaveChangesAsync();
-            return CreatedAtAction("CartItem", new { id = CartItem.Id }, CartItem);
+            return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 
         // POST: CartItems/Delete/5
@@ -93,66 +101,50 @@ namespace Collecting.Controllers
         }
 
 
-
-        /*
-        // GET: CartItems/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // POST: CartItems/ChangeQuantity/{itemId}/{quantity}
+        [HttpPost]
+        [Route("{itemId}/{quantity}")]
+        public async Task<IActionResult> ChangeQuantity(int? itemId, int quantity)
         {
-            if (id == null)
+            if (itemId == null)
             {
                 return NotFound();
             }
 
-            var cartItem = await _context.CartItemsDb.FindAsync(id);
+            CartItem cartItem = await _context.CartItemsDb.FindAsync(itemId);
+
             if (cartItem == null)
             {
                 return NotFound();
             }
-            ViewData["CartId"] = new SelectList(_context.CartsDb, "Id", "Id", cartItem.CartId);
-            ViewData["StickerId"] = new SelectList(_context.StickersDb, "Id", "Id", cartItem.StickerId);
-            return View(cartItem);
-        }
 
-        // POST: CartItems/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Quantity,StickerId,CartId")] CartItem cartItem)
-        {
-            if (id != cartItem.Id)
+            cartItem.Quantity += quantity;
+
+            if (cartItem.Quantity <= 0)
             {
-                return NotFound();
+                return await Delete(itemId);
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    _context.Update(cartItem);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CartItemExists(cartItem.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                _context.Update(cartItem);
+                await _context.SaveChangesAsync();
             }
-            ViewData["CartId"] = new SelectList(_context.CartsDb, "Id", "Id", cartItem.CartId);
-            ViewData["StickerId"] = new SelectList(_context.StickersDb, "Id", "Id", cartItem.StickerId);
-            return View(cartItem);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CartItemExists(cartItem.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 
-        private bool CartItemExists(int id)
-        {
-            return _context.CartItemsDb.Any(e => e.Id == id);
-        }*/
+        private bool CartItemExists(int id) => _context.CartItemsDb.Any(e => e.Id == id);
     }
 }
