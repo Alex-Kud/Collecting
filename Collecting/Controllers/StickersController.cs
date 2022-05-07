@@ -23,7 +23,7 @@ namespace Collecting.Controllers
 
         // GET: Stickers/All
         [HttpGet]
-        [Authorize(Roles = "User, Admin")]
+        //[Authorize(Roles = "User, Admin")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> All()
         {
             var stickers = await _context.StickersDb.ToListAsync();
@@ -132,6 +132,63 @@ namespace Collecting.Controllers
             return stickersDto;
         }
 
+        // GET: Stickers/PageInCategory/{id}/{currentPage}/{pageSize}
+        [Route("{id}/{currentPage}/{pageSize}")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> PageInCategory(int? id, int currentPage, int pageSize)
+        {
+            if (currentPage <= 0 || pageSize <= 0 || id == null)
+            {
+                return BadRequest("Некорректные данные");
+            }
+
+            decimal quantity = await _context.StickersDb.CountAsync();
+            int MaxPage = (int)Math.Ceiling(quantity / pageSize);
+            currentPage = currentPage > MaxPage ? MaxPage : currentPage;
+
+            IQueryable<Sticker> stickers;
+            if (id == 0)
+            {
+                stickers = _context.StickersDb
+                .OrderBy(s => s.Id)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize);
+            }
+            else
+            {
+                stickers = _context.StickersDb
+                .Where(s => s.CategoryID == id)
+                .OrderBy(s => s.Id)
+                .Skip((currentPage - 1) * pageSize)
+                .Take(pageSize);
+            }
+
+            var stickersDto = new List<StickerDTO>();
+
+            foreach (var sticker in stickers)
+            {
+                stickersDto.Add(new StickerDTO
+                {
+                    Id = sticker.Id,
+                    Firm = sticker.Firm,
+                    Year = sticker.Year,
+                    Country = sticker.Country,
+                    Material = sticker.Material,
+                    Width = sticker.Width,
+                    Height = sticker.Height,
+                    Text = sticker.Text,
+                    Quantity = sticker.Quantity,
+                    Price = sticker.Price,
+                    Form = sticker.Form,
+                    Img = sticker.Img,
+                    AdditionalImg = sticker.AdditionalImg,
+                    CategoryID = sticker.CategoryID
+                });
+            }
+
+            return stickersDto;
+        }
+
         // GET: Stickers/Sticker/5
         [HttpGet("{id}")]
         public async Task<ActionResult> Sticker(int? id)
@@ -199,6 +256,71 @@ namespace Collecting.Controllers
             {
                 return NotFound();
             }
+        }
+
+        // GET: Stickers/Search/text
+        [HttpGet("{text}")]
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> Search(string text)
+        {
+            var stickers = await _context.StickersDb.ToListAsync();
+            var stickersDto = new List<StickerDTO>();
+
+            foreach (var sticker in stickers)
+            {
+                if (sticker.Text.Contains(text) || sticker.Firm.Contains(text))
+                {
+                    stickersDto.Add(new StickerDTO
+                    {
+                        Id = sticker.Id,
+                        Firm = sticker.Firm,
+                        Year = sticker.Year,
+                        Country = sticker.Country,
+                        Material = sticker.Material,
+                        Width = sticker.Width,
+                        Height = sticker.Height,
+                        Text = sticker.Text,
+                        Quantity = sticker.Quantity,
+                        Price = sticker.Price,
+                        Form = sticker.Form,
+                        Img = sticker.Img,
+                        AdditionalImg = sticker.AdditionalImg,
+                        CategoryID = sticker.CategoryID
+                    });
+                }
+            }
+
+            return stickersDto;
+        }
+
+        // GET: Stickers/AllQuantityInCategory
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> AllQuantityInCategory(int id)
+        {
+            int quant = 0;
+            if (id == 0)
+            {
+                quant = await _context.StickersDb.CountAsync();
+            }
+            else
+            {
+                 quant = await _context.StickersDb
+                 .Where(s => s.CategoryID == id)
+                 .CountAsync();
+            }
+            return new JsonResult(new { quantity = quant})
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+        }
+
+        // GET: Stickers/AllQuantityInCategory
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> AllQuantity()
+        {
+            return new JsonResult(new { quantity = await _context.StickersDb.CountAsync() })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
         }
 
         // POST: Stickers/Create

@@ -22,7 +22,7 @@ namespace Collecting.Controllers
 
         // GET: Categories/All
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<CategoryDTO>>> All()
         {
             var categories = await _context.CategoriesDb.ToListAsync();
