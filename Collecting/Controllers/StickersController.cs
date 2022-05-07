@@ -267,7 +267,7 @@ namespace Collecting.Controllers
 
             foreach (var sticker in stickers)
             {
-                if (sticker.Text.Contains(text) || sticker.Firm.Contains(text))
+                if (sticker.Text.ToUpper().Contains(text.ToUpper()) || sticker.Firm.ToUpper().Contains(text.ToUpper()))
                 {
                     stickersDto.Add(new StickerDTO
                     {
