@@ -85,6 +85,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
+
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IUserService, UserService>();
 
 var app = builder.Build();
@@ -96,6 +100,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSession();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

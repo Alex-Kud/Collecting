@@ -292,6 +292,27 @@ namespace Collecting.Controllers
             return stickersDto;
         }
 
+        // GET: Stickers/SearchQuantity/text
+        [HttpGet("{text}")]
+        public async Task<ActionResult<IEnumerable<StickerDTO>>> SearchQuantity(string text)
+        {
+            var stickers = await _context.StickersDb.ToListAsync();
+            int counter = 0;
+
+            foreach (var sticker in stickers)
+            {
+                if (sticker.Text.ToUpper().Contains(text.ToUpper()) || sticker.Firm.ToUpper().Contains(text.ToUpper()))
+                {
+                    counter++;
+                }
+            }
+
+            return new JsonResult(new { quantity = counter })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+        }
+
         // GET: Stickers/AllQuantityInCategory
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> AllQuantityInCategory(int id)

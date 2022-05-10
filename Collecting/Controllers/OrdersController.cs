@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
 using Collecting.Data.Models;
+using System.Text.Json;
 
 namespace Collecting.Controllers
 {
@@ -22,7 +23,8 @@ namespace Collecting.Controllers
         public OrdersController(StickersContext context, HttpContext contextHttp)
         {
             _context = context;
-            _user = (User)contextHttp.Items["User"];
+            _user = (User)contextHttp.Items["User"];//JsonSerializer.Deserialize<User>(contextHttp.Session.GetString("User"));
+                                                    //(User)contextHttp.Items["User"];
         }
 
         // GET: All

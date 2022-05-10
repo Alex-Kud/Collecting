@@ -3,6 +3,7 @@ using Collecting.Data;
 using Collecting.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Collecting.Controllers
 {
@@ -17,6 +18,7 @@ namespace Collecting.Controllers
         public CartsController(StickersContext context, HttpContext contextHttp)
         {
             _context = context;
+            //_user = JsonSerializer.Deserialize<User>(contextHttp.Session.GetString("User"));
             _user = (User) contextHttp.Items["User"];
         }
         

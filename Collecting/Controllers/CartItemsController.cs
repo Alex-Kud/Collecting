@@ -3,7 +3,7 @@ using Collecting.Data;
 using Collecting.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Collecting.Controllers
 {
@@ -49,7 +49,7 @@ namespace Collecting.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int StickerId, int Quantity)
         {
-            User user = (User)_contextHttp.Items["User"];
+            User user = /*JsonSerializer.Deserialize<User>(_contextHttp.Session.GetString("User"));*/(User)_contextHttp.Items["User"];
             if (user == null)
             {
                 return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };

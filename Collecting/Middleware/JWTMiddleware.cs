@@ -1,8 +1,10 @@
-﻿using Collecting.Services.Interfaces;
+﻿using Collecting.Data.Models;
+using Collecting.Services.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace Collecting.Middleware
 {
@@ -56,6 +58,7 @@ namespace Collecting.Middleware
                 var user = userService.GetUserDetails(accountEmail);
                 if (user != null)
                 {
+                    //context.Session.SetString("User", JsonSerializer.Serialize<User>(user));
                     context.Items["User"] = user;
                 }
                 else

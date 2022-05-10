@@ -23,7 +23,7 @@ namespace Collecting.Controllers
             _context = context;
         }
 
-        // GET: Categories/All
+        // GET: Users/All
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> All()
         {
