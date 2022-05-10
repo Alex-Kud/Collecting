@@ -9,9 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
 using Collecting.Data.Models;
 using System.Text.Json;
+using Collecting.Middleware;
 
 namespace Collecting.Controllers
 {
+    [Authorize]
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
@@ -20,11 +22,10 @@ namespace Collecting.Controllers
         private readonly StickersContext _context;
         private readonly User _user;
 
-        public OrdersController(StickersContext context, HttpContext contextHttp)
+        public OrdersController(StickersContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            _user = (User)contextHttp.Items["User"];//JsonSerializer.Deserialize<User>(contextHttp.Session.GetString("User"));
-                                                    //(User)contextHttp.Items["User"];
+            _user = JsonSerializer.Deserialize<User>(httpContextAccessor.HttpContext.Session.GetString("User"));
         }
 
         // GET: All

@@ -1,24 +1,26 @@
 ﻿#nullable disable
 using Collecting.Data;
 using Collecting.Data.Models;
+using Collecting.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Collecting.Controllers
 {
+    [Authorize]
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     public class CartItemsController : Controller
     {
         private readonly StickersContext _context;
-        private readonly HttpContext _contextHttp;
+        private readonly User _user;
 
-        public CartItemsController(StickersContext context, HttpContext contextHttp)
+        public CartItemsController(StickersContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            _contextHttp = contextHttp;
+            _user = JsonSerializer.Deserialize<User>(httpContextAccessor.HttpContext.Session.GetString("User"));
         }
 
         // GET: CartItems/CartItem/{id}
@@ -49,14 +51,13 @@ namespace Collecting.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int StickerId, int Quantity)
         {
-            User user = /*JsonSerializer.Deserialize<User>(_contextHttp.Session.GetString("User"));*/(User)_contextHttp.Items["User"];
-            if (user == null)
+            if (_user == null)
             {
                 return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
 
             CartItem cartItem = await _context.CartItemsDb
-                .Where(s => s.StickerId == StickerId && s.CartId == user.CartId)
+                .Where(s => s.StickerId == StickerId && s.CartId == _user.CartId)
                 .FirstOrDefaultAsync();
 
             if (cartItem == null || cartItem == default)
@@ -75,7 +76,7 @@ namespace Collecting.Controllers
                     Quantity = Quantity,
                     StickerId = StickerId,
                     Sticker = tempSticker,
-                    CartId = user.CartId
+                    CartId = _user.CartId
                 };
                 _context.Add(CartItem);
             }

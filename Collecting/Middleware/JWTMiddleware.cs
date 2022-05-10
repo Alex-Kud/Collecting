@@ -12,18 +12,15 @@ namespace Collecting.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly IConfiguration _configuration;
-        //private IUserService _userService;
 
         public JWTMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
             _configuration = configuration;
-            //_userService = userService;
         }
 
         public async Task Invoke(HttpContext context, IUserService userService)
         {
-            //_userService = userService;
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
 
             if (token != null)
@@ -46,7 +43,8 @@ namespace Collecting.Middleware
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ClockSkew = TimeSpan.Zero
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidAudience = _configuration["Jwt:Audience"]
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
@@ -58,8 +56,7 @@ namespace Collecting.Middleware
                 var user = userService.GetUserDetails(accountEmail);
                 if (user != null)
                 {
-                    //context.Session.SetString("User", JsonSerializer.Serialize<User>(user));
-                    context.Items["User"] = user;
+                    context.Session.SetString("User", JsonSerializer.Serialize<User>(user));
                 }
                 else
                 {

@@ -1,12 +1,14 @@
 ﻿#nullable disable
 using Collecting.Data;
 using Collecting.Data.Models;
+using Collecting.Middleware;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace Collecting.Controllers
 {
+    [Authorize]
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
@@ -15,13 +17,12 @@ namespace Collecting.Controllers
         private readonly StickersContext _context;
         private readonly User _user;
 
-        public CartsController(StickersContext context, HttpContext contextHttp)
+        public CartsController(StickersContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            //_user = JsonSerializer.Deserialize<User>(contextHttp.Session.GetString("User"));
-            _user = (User) contextHttp.Items["User"];
+            _user = JsonSerializer.Deserialize<User>(httpContextAccessor.HttpContext.Session.GetString("User"));
         }
-        
+
         // GET: Carts/Cart/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cart>> Cart(int? id)

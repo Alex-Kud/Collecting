@@ -1,6 +1,7 @@
 ﻿using Collecting.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Text.Json;
 
 namespace Collecting.Middleware
 {
@@ -10,8 +11,9 @@ namespace Collecting.Middleware
     {
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var account = (User)context.HttpContext.Items["User"];
-            if (account == null)
+            var user = context.HttpContext.Session.GetString("User");
+
+            if (user == null)
             {
                 // Не авторизирован
                 context.Result = new JsonResult(new { message = "Неавторизован!" })
