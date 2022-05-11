@@ -47,7 +47,7 @@
 
 <body>
 
-<!--wrapper start-->
+    <!--wrapper start-->
     <div class="wrapper">
 
         <!--== Start Preloader Content ==-->
@@ -82,12 +82,12 @@
                                 <li class="has-submenu">
                                     <a href="blog.html">Blog</a>
                                     <!--<ul class="submenu-nav">
-                                  <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                  <li><a href="blog.html">Blog Right Sidebar</a></li>
-                                  <li><a href="blog-grid.html">Blog Grid Layout</a></li>
-                                  <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
-                                  <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
-                                </ul>-->
+                                      <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
+                                      <li><a href="blog.html">Blog Right Sidebar</a></li>
+                                      <li><a href="blog-grid.html">Blog Grid Layout</a></li>
+                                      <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
+                                      <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
+                                    </ul>-->
                                 </li>
                                 <li><a href="contact.html">Contact</a></li>
                                 <li><a href="about-us.html">About</a></li>
@@ -194,21 +194,20 @@
                                         <h4 class="title">Login</h4>
                                         <p>Please login using account detail bellow.</p>
                                     </div>
-                                    <form action="#">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <input class="form-control" type="email" placeholder="Email">
+                                                    <input class="form-control" id="login-email" type="email" placeholder="Email">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <input class="form-control" type="password" placeholder="Password">
+                                                    <input class="form-control" id="login-password" type="password" placeholder="Password">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="login-form-group">
-                                                    <button class="btn-sign" type="submit">Sign In</button>
+                                                    <button class="btn-sign" type="submit" id="signin">Sign In</button>
                                                     <a class="btn-pass-forgot" href="#/">Forgot your password?</a>
                                                 </div>
                                             </div>
@@ -218,7 +217,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+                                    <button class="btn-sign" type="submit" id="clicker">Кликлер </button>
                                 </div>
                                 <!--== End Login Form ==-->
                             </div>
@@ -403,30 +402,30 @@
         <!--== End Side Menu ==-->
     </div>
 
-<!--=======================Javascript============================-->
+    <!--=======================Javascript============================-->
+    <!--=== jQuery Modernizr Min Js ===-->
+    <script src="assets/js/modernizr.js"></script>
+    <!--=== jQuery Min Js ===-->
+    <script src="assets/js/jquery-main.js"></script>
+    <!--=== jQuery Migration Min Js ===-->
+    <script src="assets/js/jquery-migrate.js"></script>
+    <!--=== jQuery Popper Min Js ===-->
+    <script src="assets/js/popper.min.js"></script>
+    <!--=== jQuery Bootstrap Min Js ===-->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!--=== jQuery Headroom Min Js ===-->
+    <script src="assets/js/headroom.min.js"></script>
+    <!--=== jQuery Swiper Min Js ===-->
+    <script src="assets/js/swiper.min.js"></script>
+    <!--=== jQuery Fancybox Min Js ===-->
+    <script src="assets/js/fancybox.min.js"></script>
+    <!--=== jQuery Slick Nav Js ===-->
+    <script src="assets/js/slicknav.js"></script>
 
-<!--=== jQuery Modernizr Min Js ===-->
-<script src="assets/js/modernizr.js"></script>
-<!--=== jQuery Min Js ===-->
-<script src="assets/js/jquery-main.js"></script>
-<!--=== jQuery Migration Min Js ===-->
-<script src="assets/js/jquery-migrate.js"></script>
-<!--=== jQuery Popper Min Js ===-->
-<script src="assets/js/popper.min.js"></script>
-<!--=== jQuery Bootstrap Min Js ===-->
-<script src="assets/js/bootstrap.min.js"></script>
-<!--=== jQuery Headroom Min Js ===-->
-<script src="assets/js/headroom.min.js"></script>
-<!--=== jQuery Swiper Min Js ===-->
-<script src="assets/js/swiper.min.js"></script>
-<!--=== jQuery Fancybox Min Js ===-->
-<script src="assets/js/fancybox.min.js"></script>
-<!--=== jQuery Slick Nav Js ===-->
-<script src="assets/js/slicknav.js"></script>
-
-<!--=== jQuery Custom Js ===-->
-<script src="assets/js/custom.js"></script>
-
+    <!--=== jQuery Custom Js ===-->
+    <script src="assets/js/custom.js"></script>
+    <!--=== My Js ===-->
+    <script src="assets/js/login.js"></script>
 </body>
 
 </html>

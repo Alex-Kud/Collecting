@@ -8,9 +8,10 @@ using System.Security.Claims;
 using System.Text;
 
 namespace Collecting.Controllers
-{
-    [Route("api/[controller]")]
+{    
     [ApiController]
+    [Route("api/[controller]")]
+    [Produces("application/json")]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;

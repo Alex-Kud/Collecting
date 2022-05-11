@@ -24,6 +24,10 @@ namespace Collecting.Controllers
         }
 
         // GET: Users/All
+        /// <summary>
+        /// Получение списка всех пользователей
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> All()
         {

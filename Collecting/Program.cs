@@ -59,6 +59,8 @@ builder.Services.AddSwaggerGen(opt =>
             Array.Empty<string>()
         }
     });
+    var filePath = Path.Combine(System.AppContext.BaseDirectory, "Collecting.xml");
+    opt.IncludeXmlComments(filePath);
 });
 
 
