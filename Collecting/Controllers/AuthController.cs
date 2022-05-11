@@ -47,22 +47,23 @@ namespace Collecting.Controllers
         /// <returns></returns>
         private string GenerateJwtToken(string userEmail)
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
             var user = _userService.GetUserDetails(userEmail);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, userEmail),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString()),
-                }),
-                Expires = DateTime.UtcNow.AddHours(1),
-                Issuer = _configuration["Jwt:Issuer"],
-                Audience = _configuration["Jwt:Audience"],
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:key"]);
+
+            var claims = new List<Claim> {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userEmail),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+
+            // создаем JWT-токен
+            var jwt = new JwtSecurityToken(
+                    issuer: _configuration["Jwt:Issuer"],
+                    audience: _configuration["Jwt:Audience"],
+                    claims: claims,
+                    expires: DateTime.UtcNow.AddHours(1),
+                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature));
+
+            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
     }
 }
