@@ -46,10 +46,10 @@ namespace Collecting.Controllers
             return cartItem;
         }
 
-        // POST: CartItems/Create/{StickerId}/{Quantity}
-        [Route("{StickerId}/{Quantity}")]
+        // POST: CartItems/Create/{stickerId}/{quantity}
+        [Route("{stickerId}/{quantity}")]
         [HttpPost]
-        public async Task<IActionResult> Create(int StickerId, int Quantity)
+        public async Task<IActionResult> Create(int stickerId, int quantity)
         {
             if (_user == null)
             {
@@ -59,13 +59,13 @@ namespace Collecting.Controllers
             }
 
             CartItem cartItem = await _context.CartItemsDb
-                .Where(s => s.StickerId == StickerId && s.CartId == _user.CartId)
+                .Where(s => s.StickerId == stickerId && s.CartId == _user.CartId)
                 .FirstOrDefaultAsync();
 
             if (cartItem == null || cartItem == default)
             {
                 var addingSticker = await _context.StickersDb
-                    .Where(s => s.Id == StickerId)
+                    .Where(s => s.Id == stickerId)
                     .FirstOrDefaultAsync();
 
                 if (addingSticker == null || addingSticker == default)
@@ -73,22 +73,32 @@ namespace Collecting.Controllers
                     return BadRequest("Наклейка не найдена");
                 }
 
+                if (cartItem.Sticker.Quantity < quantity)
+                {
+                    quantity = cartItem.Sticker.Quantity;
+                }
+
                 cartItem = new()
                 {
-                    Quantity = Quantity,
-                    StickerId = StickerId,
+                    Quantity = quantity,
+                    StickerId = stickerId,
                     Sticker = addingSticker,
                     CartId = _user.CartId
                 };
-                await _context.AddAsync(CartItem);
+                await _context.AddAsync(cartItem);
             }
             else
             {
-                cartItem.Quantity += Quantity;
+                cartItem.Quantity += quantity;
+                if (cartItem.Sticker.Quantity < cartItem.Quantity)
+                {
+                    cartItem.Quantity = cartItem.Sticker.Quantity;
+                }
                 _context.Update(cartItem);
             }
 
             await _context.SaveChangesAsync();
+            cartItem.Sticker = await _context.StickersDb.FirstOrDefaultAsync(m => m.Id == cartItem.StickerId);
             return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 
@@ -116,7 +126,6 @@ namespace Collecting.Controllers
             };
         }
 
-
         // POST: CartItems/ChangeQuantity/{itemId}/{quantity}
         [HttpPost]
         [Route("{itemId}/{quantity}")]
@@ -134,7 +143,13 @@ namespace Collecting.Controllers
                 return NotFound();
             }
 
-            cartItem.Quantity += quantity;
+            cartItem.Sticker = await _context.StickersDb.FirstOrDefaultAsync(m => m.Id == cartItem.StickerId);
+
+            if (cartItem.Sticker.Quantity < quantity)
+            {
+                quantity = cartItem.Sticker.Quantity;
+            }
+            cartItem.Quantity = quantity;
 
             if (cartItem.Quantity <= 0)
             {
@@ -157,7 +172,7 @@ namespace Collecting.Controllers
                     throw;
                 }
             }
-
+            
             return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 

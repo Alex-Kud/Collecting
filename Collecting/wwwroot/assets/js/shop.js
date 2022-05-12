@@ -146,7 +146,7 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
                 content += "</a> ";
                 content += "<div class=\"product-action\">";
                 content += "<div class=\"addto-wrap\">";
-                content += "<a class=\"add-cart\" href=\"cart.html\">";
+                content += "<a class=\"add-cart\" href=\"javascript:AddToCart(" + labels[i]["id"] + ")\">";
                 content += "<i class=\"zmdi zmdi-shopping-cart-plus icon\"></i>";
                 content += "</a> ";
                 content += "</div> ";
@@ -168,4 +168,42 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
             $('#stickers').html(content);
         }
     });
+}
+
+function AddToCart(id) {
+    const token = sessionStorage.getItem("accessToken");
+    if (token != null) {
+        console.log("id adding sticker: " + id);
+        //Add(id);
+
+        // Отправка запроса на сервер
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-type": "application/json"
+            },
+            url: "../api/CartItems/Create/" + id + "/1",
+            // После получения ответа сервера
+            success: function (result) {
+                console.log(result);
+                // Отправка запроса на сервер
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    headers: { "Authorization": "Bearer " + token },
+                    url: "../api/Carts/QuantityUser",
+                    // После получения ответа сервера
+                    success: function (result) {
+                        console.log(result.quantity);
+                        $("#cartQuantity").html(result.quantity);
+                    }
+                });
+            }
+        });
+    }
+    else {
+        alert("Для добавления товара в корзину необходимо авторизоваться")
+    }
 }

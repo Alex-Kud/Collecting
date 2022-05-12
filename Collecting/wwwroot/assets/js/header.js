@@ -24,6 +24,5 @@ else {
 function logout() {
     sessionStorage.removeItem("accessToken");
     console.log(sessionStorage.getItem("accessToken"));
-    alert("Птерадактиль");
     window.location.href = "login.html";
 }

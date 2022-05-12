@@ -34,7 +34,7 @@ async function getTokenAsync() {
     }
     else {
         // если произошла ошибка, из errorText получаем текст ошибки
-        console.log("Error: ", response.status, response.errorText);
+        console.log("Error: ", response.status);
     }
 };
 

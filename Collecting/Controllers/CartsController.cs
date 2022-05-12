@@ -42,6 +42,12 @@ namespace Collecting.Controllers
             var items = await _context.CartItemsDb
                 .Where(i => i.CartId == id)
                 .ToListAsync();
+
+            foreach (var item in items)
+            {
+                item.Sticker = await _context.StickersDb.FirstOrDefaultAsync(m => m.Id == item.StickerId);
+            }
+
             cart.Items = items;
 
             return cart;
@@ -59,6 +65,11 @@ namespace Collecting.Controllers
             var items = await _context.CartItemsDb
                 .Where(i => i.CartId == id)
                 .ToListAsync();
+
+            foreach (var item in items)
+            {
+                item.Sticker = await _context.StickersDb.FirstOrDefaultAsync(m => m.Id == item.StickerId);
+            }
 
             decimal total = items.Sum(i => i.TotalPrice);
 
@@ -122,6 +133,28 @@ namespace Collecting.Controllers
 
             return await Quantity(_user.CartId);
 
+        }
+
+        // DELETE: Carts/Delete
+        [HttpDelete]
+        public async Task<IActionResult> Delete()
+        {
+            var cartItems = await _context.CartItemsDb.ToListAsync();
+
+            if (cartItems == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var cartItem in cartItems)
+            {
+                _context.CartItemsDb.Remove(cartItem);
+            }
+            await _context.SaveChangesAsync();
+            return new JsonResult(new { message = "Очистка корзины произошла успешно!" })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
         }
     }
 }
