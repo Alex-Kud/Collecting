@@ -43,6 +43,45 @@
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        #popUp {
+            top: 10%;
+            left: 20%;
+            height: 95%;
+            position: fixed;
+            width: 75%;
+            border-radius: 11px;
+            margin-left: -10%;
+            margin-top: -25%;
+            display: none;
+            opacity: 0;
+            padding: 17px;
+            z-index: 6;
+        }
+
+        #popUp #close {
+            cursor: pointer;
+            position: absolute;
+            width: 23px;
+            height: 23px;
+            top: 17px;
+            right: 17px;
+            display: block;
+        }
+
+        #overlay {
+            z-index: 4;
+            background-color: #000;
+            position: fixed;
+            opacity: 0.86;
+            width: 100%;
+            height: 100%;
+            display: none;
+            top: 0;
+            left: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -214,7 +253,50 @@
                             <div class="product-body-wrap">
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="nav-grid" role="tabpanel" aria-labelledby="nav-grid-tab">
-                                        <div class="row" id="stickers"></div>
+                                        <div class="row" id="stickers">
+
+
+
+                                            <!--
+                                        <div class="col-sm-6 col-xl-4">
+                                            <!--== Start Shop Item ==-->
+                                            <!--<div class="product-item">
+                                            <div class="inner-content">
+                                                <div class="product-thumb">
+                                                    <a href="single-product-simple.html">
+                                                        <img class="w-100" src="assets/img/shop/10.jpg" alt="Image-HasTech">
+                                                    </a>
+                                                    <div class="product-action">
+                                                        <div class="addto-wrap">
+                                                            <a class="add-cart" href="cart.html">
+                                                                <i class="zmdi zmdi-shopping-cart-plus icon"></i>
+                                                            </a>
+                                                            <a class="add-wishlist" href="wishlist.html">
+                                                                <i class="zmdi zmdi-favorite-outline zmdi-hc-fw icon"></i>
+                                                            </a>
+                                                            <a class="add-quick-view" href="javascript:void(0);">
+                                                                <i class="zmdi zmdi-search icon"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="product-desc">
+                                                    <div class="product-info">
+                                                        <h4 class="title"><a href="single-product-simple.html">Primo Court Mid Suede</a></h4>
+                                                        <div class="prices">
+                                                            <span class="price">$39.00</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--== End Shop Item ==-->
+                                            <!--</div>
+                                        -->
+
+
+
+                                        </div>
                                         <!--== Start Pagination Wrap ==-->
                                         <div class="row">
                                             <div class="col-12">
@@ -365,6 +447,11 @@
         <!--== Scroll Top Button ==-->
         <div id="scroll-to-top" class="scroll-to-top"><span class="fa fa-angle-double-up"></span></div>
 
+        <div id="popUp">
+            <div id="popItem"><h1>Какое-то предложение!</h1></div>
+        </div>
+        <div id="overlay"></div>
+
         <!--== Start Quick View Menu ==-->
         <aside class="product-quick-view-modal">
             <div class="product-quick-view-inner">
@@ -386,27 +473,6 @@
                                     <span class="price">$70.00</span>
                                 </div>
                                 <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,</p>
-                                <div class="quick-view-select">
-                                    <div class="quick-view-select-item">
-                                        <label for="forSizes" class="form-label">Size:</label>
-                                        <select class="form-select" id="forSizes" required>
-                                            <option selected value="">s</option>
-                                            <option>m</option>
-                                            <option>l</option>
-                                            <option>xl</option>
-                                        </select>
-                                    </div>
-                                    <div class="quick-view-select-item">
-                                        <label for="forColors" class="form-label">Color:</label>
-                                        <select class="form-select" id="forColors" required>
-                                            <option selected value="">red</option>
-                                            <option>green</option>
-                                            <option>blue</option>
-                                            <option>yellow</option>
-                                            <option>white</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="action-top">
                                     <div class="pro-qty">
                                         <input type="text" id="quantity4" title="Quantity" value="1" />
@@ -477,5 +543,4 @@
     <script src="assets/js/shop.js"></script>
     <script src="assets/js/header.js"></script>
 </body>
-
 </html>

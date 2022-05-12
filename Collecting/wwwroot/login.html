@@ -423,8 +423,7 @@
     <!--=== My Js ===-->
     <script src="assets/js/login.js"></script>
     <script>
-        const token = sessionStorage.getItem("accessToken");
-        if (token != null) {
+        if (sessionStorage.getItem("accessToken") != null) {
             window.location.href = "account.html";
         }
         else {

@@ -73,9 +73,9 @@ namespace Collecting.Controllers
                     return BadRequest("Наклейка не найдена");
                 }
 
-                if (cartItem.Sticker.Quantity < quantity)
+                if (addingSticker.Quantity < quantity)
                 {
-                    quantity = cartItem.Sticker.Quantity;
+                    quantity = addingSticker.Quantity;
                 }
 
                 cartItem = new()
@@ -89,6 +89,7 @@ namespace Collecting.Controllers
             }
             else
             {
+                cartItem.Sticker = await _context.StickersDb.FirstOrDefaultAsync(m => m.Id == cartItem.StickerId);
                 cartItem.Quantity += quantity;
                 if (cartItem.Sticker.Quantity < cartItem.Quantity)
                 {
@@ -98,7 +99,7 @@ namespace Collecting.Controllers
             }
 
             await _context.SaveChangesAsync();
-            cartItem.Sticker = await _context.StickersDb.FirstOrDefaultAsync(m => m.Id == cartItem.StickerId);
+            
             return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 

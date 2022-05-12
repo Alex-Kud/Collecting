@@ -334,27 +334,6 @@
                                     <span class="price">$70.00</span>
                                 </div>
                                 <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia,</p>
-                                <div class="quick-view-select">
-                                    <div class="quick-view-select-item">
-                                        <label for="forSizes" class="form-label">Size:</label>
-                                        <select class="form-select" id="forSizes" required>
-                                            <option selected value="">s</option>
-                                            <option>m</option>
-                                            <option>l</option>
-                                            <option>xl</option>
-                                        </select>
-                                    </div>
-                                    <div class="quick-view-select-item">
-                                        <label for="forColors" class="form-label">Color:</label>
-                                        <select class="form-select" id="forColors" required>
-                                            <option selected value="">red</option>
-                                            <option>green</option>
-                                            <option>blue</option>
-                                            <option>yellow</option>
-                                            <option>white</option>
-                                        </select>
-                                    </div>
-                                </div>
                                 <div class="action-top">
                                     <div class="pro-qty">
                                         <input type="text" id="quantity4" title="Quantity" value="1" />
@@ -423,7 +402,11 @@
 
     <script src="assets/js/cart.js"></script>
     <script src="assets/js/header.js"></script>
-
+    <script>
+        if (sessionStorage.getItem("accessToken") == null) {
+            window.location.href = "login.html";
+        }
+    </script>
 </body>
 
 </html>

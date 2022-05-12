@@ -191,7 +191,7 @@ namespace Collecting.Controllers
 
         // GET: Stickers/Sticker/5
         [HttpGet("{id}")]
-        public async Task<ActionResult> Sticker(int? id)
+        public async Task<ActionResult<StickerDTO>> Sticker(int? id)
         {
             /*var temp = _context.StickersDb.ToList();
             foreach (var sticker in temp)
@@ -248,9 +248,9 @@ namespace Collecting.Controllers
                     Description = category.Description
                 };
 
-                var answer = '[' + JsonConvert.SerializeObject(stickerDTO) + ',' + JsonConvert.SerializeObject(categoryDTO) + ']';
+                //var answer = '[' + JsonConvert.SerializeObject(stickerDTO) + ',' + JsonConvert.SerializeObject(categoryDTO) + ']';
 
-                return Content(answer, "application/json");
+                return stickerDTO;//Content(answer, "application/json");
             }
             catch (Exception)
             {
