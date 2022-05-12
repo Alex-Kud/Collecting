@@ -8,19 +8,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Collecting.Data;
 using Collecting.Data.Models;
+using System.Text.Json;
+using Collecting.Middleware;
 
 namespace Collecting.Controllers
 {
+    [Authorize]
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
     public class UsersController : Controller
     {
         private readonly StickersContext _context;
+        private readonly User _user;
 
-        public UsersController(StickersContext context)
+        public UsersController(StickersContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _user = JsonSerializer.Deserialize<User>(httpContextAccessor.HttpContext.Session.GetString("User"));
         }
 
         // GET: Users/All
@@ -35,6 +40,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Users/GetUser/5
+        /// <summary>
+        /// Получение данных о пользователе по его id
+        /// </summary>
+        /// <param name="id">id пользователя</param>
+        /// <returns>Пользователь</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int? id)
         {
@@ -54,7 +64,23 @@ namespace Collecting.Controllers
             return user;
         }
 
+        // GET: Users/GetUser
+        /// <summary>
+        /// Получение данных об авторизованном пользователе
+        /// </summary>
+        /// <returns>Пользователь</returns>
+        [HttpGet]
+        public async Task<ActionResult<User>> GetUser()
+        {
+            return await GetUser(_user.Id);
+        }
+
         // POST: Users/Create
+        /// <summary>
+        /// Создание пользователя
+        /// </summary>
+        /// <param name="user">Данные пользователя</param>
+        /// <returns>Созданный пользователь</returns>
         [HttpPost]
         public async Task<IActionResult> Create(User user)
         {
@@ -78,6 +104,12 @@ namespace Collecting.Controllers
         }
 
         // Put: Users/ChangeRole/{id}/{newRole}
+        /// <summary>
+        /// Изменение роли пользователя
+        /// </summary>
+        /// <param name="id">id пользователя</param>
+        /// <param name="newRole">Новая роль</param>
+        /// <returns></returns>
         [HttpPut]
         [Route("{id}/{newRole}")]
         public async Task<IActionResult> ChangeRole(int? id, Roles newRole)
@@ -107,6 +139,11 @@ namespace Collecting.Controllers
         }
 
         // DELETE: Users/Delete/5
+        /// <summary>
+        /// Удаление пользователя
+        /// </summary>
+        /// <param name="id">id пользователя</param>
+        /// <returns>Сообщение с результатом удаление (успешно или нет)</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete(int? id)
         {

@@ -19,17 +19,28 @@ async function getTokenAsync() {
         body: JSON.stringify(user)
     });
     // получаем данные 
-    const data = await response.json();
+    let data = await response.json();
 
     // если запрос прошел нормально
     if (response.ok === true) {
         // сохраняем в хранилище sessionStorage токен доступа
         sessionStorage.setItem(tokenKey, data.token);
-        console.log(data.token);
-        token = data.token;
+        
+        console.log(sessionStorage.getItem(tokenKey));
+        $("#myaccount").attr("href", "account.html");
+        $("#account").attr("href", "javascript:my_function()");
+        $("#account").html("Logout");
+        window.location.href = "account.html";
     }
     else {
         // если произошла ошибка, из errorText получаем текст ошибки
         console.log("Error: ", response.status, response.errorText);
     }
 };
+
+function logout() {
+    sessionStorage.removeItem(tokenKey);
+    console.log(sessionStorage.getItem(tokenKey));
+    alert("Птерадактиль");
+    window.location.href = "login.html";
+}

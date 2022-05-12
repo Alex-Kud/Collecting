@@ -35,7 +35,7 @@ namespace Collecting.Controllers
             return BadRequest("Пожалуйста, введите действительное имя пользователя и пароль");
         }
 
-        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         [HttpGet(nameof(GetResult))]
         public IActionResult GetResult() => Ok("Всё ок");
 

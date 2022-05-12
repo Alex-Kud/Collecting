@@ -47,7 +47,7 @@
 
 <body>
 
-<!--wrapper start-->
+    <!--wrapper start-->
     <div class="wrapper">
 
         <!--== Start Preloader Content ==-->
@@ -82,12 +82,12 @@
                                 <li class="has-submenu">
                                     <a href="blog.html">Blog</a>
                                     <!--<ul class="submenu-nav">
-                                  <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                  <li><a href="blog.html">Blog Right Sidebar</a></li>
-                                  <li><a href="blog-grid.html">Blog Grid Layout</a></li>
-                                  <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
-                                  <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
-                                </ul>-->
+                                      <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
+                                      <li><a href="blog.html">Blog Right Sidebar</a></li>
+                                      <li><a href="blog-grid.html">Blog Grid Layout</a></li>
+                                      <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
+                                      <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
+                                    </ul>-->
                                 </li>
                                 <li><a href="contact.html">Contact</a></li>
                                 <li><a href="about-us.html">About</a></li>
@@ -97,27 +97,23 @@
                     <div class="col-sm-7 col-lg-2 d-none d-sm-block text-end">
                         <div class="header-action-area">
                             <ul class="header-action">
-                                <li class="search-item">
-                                    <a class="action-item" href="page-search.html">
-                                        <i class="zmdi zmdi-search icon"></i>
-                                    </a>
-                                </li>
                                 <li class="currency-menu">
                                     <a class="action-item" href="#/"><i class="zmdi zmdi-lock-outline icon"></i></a>
                                     <ul class="currency-dropdown">
                                         <li class="account">
-                                            <a href="#/"><span class="current-account">My account</span></a>
+                                            <a id="myaccount" href="login.html"><span class="current-account">My account</span></a>
                                             <ul>
-                                                <li><a href="login.html">Login</a></li>
+                                                <li><a id="account" href="login.html">Login</a></li>
                                             </ul>
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="mini-cart">
-                                    <a class="action-item" href="#/">
+                                <li class="mini-cart" id="miniСart">
+                                    <a class="action-item" href="/cart.html">
                                         <i class="zmdi zmdi-shopping-cart-plus icon"></i>
-                                        <span class="cart-quantity">2</span>
+                                        <span class="cart-quantity" id="cartQuantity">2</span>
                                     </a>
+                                    <!--
                                     <div class="mini-cart-dropdown">
                                         <div class="cart-item">
                                             <div class="thumb">
@@ -149,6 +145,7 @@
                                             <a href="checkout.html">Checkout</a>
                                         </div>
                                     </div>
+                                    -->
                                 </li>
                             </ul>
                         </div>
@@ -437,31 +434,32 @@
         <!--== End Side Menu ==-->
     </div>
 
-<!--=======================Javascript============================-->
+    <!--=======================Javascript============================-->
+    <!--=== jQuery Modernizr Min Js ===-->
+    <script src="assets/js/modernizr.js"></script>
+    <!--=== jQuery Min Js ===-->
+    <script src="assets/js/jquery-main.js"></script>
+    <!--=== jQuery Migration Min Js ===-->
+    <script src="assets/js/jquery-migrate.js"></script>
+    <!--=== jQuery Popper Min Js ===-->
+    <script src="assets/js/popper.min.js"></script>
+    <!--=== jQuery Bootstrap Min Js ===-->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!--=== jQuery Headroom Min Js ===-->
+    <script src="assets/js/headroom.min.js"></script>
+    <!--=== jQuery Swiper Min Js ===-->
+    <script src="assets/js/swiper.min.js"></script>
+    <!--=== jQuery Fancybox Min Js ===-->
+    <script src="assets/js/fancybox.min.js"></script>
+    <!--=== jQuery Slick Nav Js ===-->
+    <script src="assets/js/slicknav.js"></script>
+    <!--=== jQuery Countdown Js ===-->
+    <script src="assets/js/countdown.js"></script>
 
-<!--=== jQuery Modernizr Min Js ===-->
-<script src="assets/js/modernizr.js"></script>
-<!--=== jQuery Min Js ===-->
-<script src="assets/js/jquery-main.js"></script>
-<!--=== jQuery Migration Min Js ===-->
-<script src="assets/js/jquery-migrate.js"></script>
-<!--=== jQuery Popper Min Js ===-->
-<script src="assets/js/popper.min.js"></script>
-<!--=== jQuery Bootstrap Min Js ===-->
-<script src="assets/js/bootstrap.min.js"></script>
-<!--=== jQuery Headroom Min Js ===-->
-<script src="assets/js/headroom.min.js"></script>
-<!--=== jQuery Swiper Min Js ===-->
-<script src="assets/js/swiper.min.js"></script>
-<!--=== jQuery Fancybox Min Js ===-->
-<script src="assets/js/fancybox.min.js"></script>
-<!--=== jQuery Slick Nav Js ===-->
-<script src="assets/js/slicknav.js"></script>
-<!--=== jQuery Countdown Js ===-->
-<script src="assets/js/countdown.js"></script>
+    <!--=== jQuery Custom Js ===-->
+    <script src="assets/js/custom.js"></script>
 
-<!--=== jQuery Custom Js ===-->
-<script src="assets/js/custom.js"></script>
+    <script src="assets/js/header.js"></script>
 
 </body>
 

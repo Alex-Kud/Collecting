@@ -120,7 +120,7 @@ namespace Collecting.Controllers
                 return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
             }
 
-            return await TotalPrice(_user.CartId);
+            return await Quantity(_user.CartId);
 
         }
     }

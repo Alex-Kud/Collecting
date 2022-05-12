@@ -46,14 +46,16 @@ namespace Collecting.Controllers
             return cartItem;
         }
 
-        // POST: CartItems/Create
+        // POST: CartItems/Create/{StickerId}/{Quantity}
         [Route("{StickerId}/{Quantity}")]
         [HttpPost]
         public async Task<IActionResult> Create(int StickerId, int Quantity)
         {
             if (_user == null)
             {
-                return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
+                return new JsonResult(new { message = "Неавторизован!" }) {
+                    StatusCode = StatusCodes.Status401Unauthorized 
+                };
             }
 
             CartItem cartItem = await _context.CartItemsDb
@@ -62,11 +64,11 @@ namespace Collecting.Controllers
 
             if (cartItem == null || cartItem == default)
             {
-                var tempSticker = await _context.StickersDb
+                var addingSticker = await _context.StickersDb
                     .Where(s => s.Id == StickerId)
                     .FirstOrDefaultAsync();
 
-                if (tempSticker == null || tempSticker == default)
+                if (addingSticker == null || addingSticker == default)
                 {
                     return BadRequest("Наклейка не найдена");
                 }
@@ -75,10 +77,10 @@ namespace Collecting.Controllers
                 {
                     Quantity = Quantity,
                     StickerId = StickerId,
-                    Sticker = tempSticker,
+                    Sticker = addingSticker,
                     CartId = _user.CartId
                 };
-                _context.Add(CartItem);
+                await _context.AddAsync(CartItem);
             }
             else
             {
