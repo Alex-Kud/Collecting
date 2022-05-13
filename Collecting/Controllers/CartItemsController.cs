@@ -58,15 +58,15 @@ namespace Collecting.Controllers
                 };
             }
 
-            CartItem cartItem = await _context.CartItemsDb
+            CartItem cartItem = _context.CartItemsDb
                 .Where(s => s.StickerId == stickerId && s.CartId == _user.CartId)
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
 
             if (cartItem == null || cartItem == default)
             {
-                var addingSticker = await _context.StickersDb
+                var addingSticker = _context.StickersDb
                     .Where(s => s.Id == stickerId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
 
                 if (addingSticker == null || addingSticker == default)
                 {

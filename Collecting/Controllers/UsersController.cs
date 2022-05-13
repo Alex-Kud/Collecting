@@ -138,6 +138,56 @@ namespace Collecting.Controllers
             }
         }
 
+        // Put: Users/Edit
+        /// <summary>
+        /// Изменение пользователя
+        /// </summary>
+        /// <param name="newUser">Новый пользователь</param>
+        /// <returns>Новый пользователь</returns>
+        [HttpPut]
+        public async Task<IActionResult> Edit(User newUser)
+        {
+            if (newUser == null)
+            {
+                return BadRequest("Некорректные данные");
+            }
+
+            User user = await _context.UsersDb.FindAsync(newUser.Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Surname = newUser.Surname;
+            user.Address = newUser.Address;
+            user.CartId = newUser.CartId;
+            user.Email = newUser.Email;
+            user.Country = newUser.Country;
+            user.Index = newUser.Index;
+            user.Name = newUser.Name; 
+            user.Role = newUser.Role;
+            user.Password = newUser.Password;
+
+            try
+            {
+                _context.Update(user);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(user.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+        }
+
         // DELETE: Users/Delete/5
         /// <summary>
         /// Удаление пользователя
@@ -167,7 +217,7 @@ namespace Collecting.Controllers
             };
         }
 
-
+        private bool UserExists(int id) => _context.UsersDb.Any(e => e.Id == id);
         /*
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)

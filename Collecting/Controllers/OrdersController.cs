@@ -29,16 +29,36 @@ namespace Collecting.Controllers
         }
 
         // GET: All
+        /// <summary>
+        /// Получение всех заказов
+        /// </summary>
+        /// <returns>Список всех заказов</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Order>>> All()
         {
-            return await _context.OrdersDb
+            var orders = await _context.OrdersDb
                 .Include(o => o.Cart)
                 .Include(o => o.User)
                 .ToListAsync();
+
+            foreach (var order in orders)
+            {
+                order.Cart.Items = await _context.CartItemsDb.Where(i => i.CartId == order.CartId).ToListAsync();
+                foreach (var item in order.Cart.Items)
+                {
+                    item.Sticker = await _context.StickersDb.FindAsync(item.StickerId);
+                }
+            }
+
+            return orders;
         }
 
         // GET: Orders/Order/5
+        /// <summary>
+        /// Получение заказа по id
+        /// </summary>
+        /// <param name="id">id заказа</param>
+        /// <returns>Заказ с заданным id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> Order(int? id)
         {
@@ -60,7 +80,47 @@ namespace Collecting.Controllers
             return order;
         }
 
+        // GET: Orders/UserOrders
+        /// <summary>
+        /// Получение заказов авторизованного пользователя
+        /// </summary>
+        /// <returns>Список заказов авторизованного пользователя</returns>
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Order>>> UserOrders()
+        {
+            if (_user == null)
+            {
+                return new JsonResult(new { message = "Неавторизован!" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            }
+
+            var orders = await _context.OrdersDb
+                .Include(o => o.Cart)
+                .Include(o => o.User)
+                .Where(o => o.UserId == _user.Id)
+                .ToListAsync();
+
+            if (orders == null || orders == default)
+            {
+                return NotFound();
+            }
+
+            foreach (var order in orders)
+            {
+                order.Cart.Items = await _context.CartItemsDb.Where(i => i.CartId == order.CartId).ToListAsync();
+                foreach (var item in order.Cart.Items)
+                {
+                    item.Sticker = await _context.StickersDb.FindAsync(item.StickerId);
+                }
+            }
+            orders.OrderBy(o => o.Status);
+            return orders;
+        }
+
         // POST: Orders/Create
+        /// <summary>
+        /// Создание заказа
+        /// </summary>
+        /// <returns>Созданный заказ</returns>
         [HttpPost]
         public async Task<IActionResult> Create()
         {
@@ -80,7 +140,7 @@ namespace Collecting.Controllers
                     CartId = _user.CartId,
                     Cart = tempCart,
                     UserId = _user.Id,
-                    User = _user,
+                    //User = _user,
                     Date = DateTime.Now,
                     Status = OrderStatus.Processed
                 };
@@ -91,16 +151,16 @@ namespace Collecting.Controllers
                     await _context.SaveChangesAsync();
                 }
 
-
                 Cart cart = new()
                 {
                     UserId = _user.Id,
                 };
                 await _context.CartsDb.AddAsync(cart);
                 await _context.SaveChangesAsync();
-                _user.CartId = cart.Id;
 
-                _context.UsersDb.Update(_user);
+                User user = await _context.UsersDb.FindAsync(_user.Id);
+                user.CartId = cart.Id;
+                _context.UsersDb.Update(user);
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("Order", new { id = order.Id }, order);
             }
@@ -111,6 +171,12 @@ namespace Collecting.Controllers
         }
 
         // Put: Orders/ChangeStatus/{id}/{newStatus}
+        /// <summary>
+        /// Изменение статуса заказа
+        /// </summary>
+        /// <param name="id">id заказа</param>
+        /// <param name="newStatus">Новый статус</param>
+        /// <returns>Измененный заказ</returns>
         [HttpPut]
         [Route("{id}/{newStatus}")]
         public async Task<IActionResult> ChangeStatus(int? id, OrderStatus newStatus)
@@ -140,6 +206,11 @@ namespace Collecting.Controllers
         }
 
         // DELETE: Orders/Delete/5
+        /// <summary>
+        /// Удаление заказа
+        /// </summary>
+        /// <param name="id">id заказа</param>
+        /// <returns>Сообщение о том, удалось ли удалить заказ</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete(int? id)
         {

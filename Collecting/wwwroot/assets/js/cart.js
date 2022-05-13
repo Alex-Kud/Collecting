@@ -37,7 +37,7 @@ function getCart() {
                     content += `            <div class="dec qty-btn" onclick="countMinus(${labels["items"][i]["id"]})">-</div>`
                     content += `        </div>`
                     content += `    </td>`
-                    content += `    <td class="product-subtotal" > <span class="price">${labels["items"][i]["totalPrice"]} sticker</span></td>`
+                    content += `    <td class="product-subtotal"> <span class="price">${labels["items"][i]["totalPrice"]} sticker</span></td>`
                     content += `</tr>`
                 }
                 $('#productsInCart').append(content);
@@ -129,7 +129,23 @@ function removeItem(id) {
         url: "../api/CartItems/Delete/" + id,
         // После получения ответа сервера
         success: function (result) {
-            updateCart(id);
+            getCart();
+        }
+    });
+}
+
+function makingAnOrder() {
+    // Отправка запроса на сервер
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        headers: {
+            "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
+        },
+        url: "../api/Orders/Create",
+        // После получения ответа сервера
+        success: function (order) {
+            window.location.href = 'checkout.html';
         }
     });
 }

@@ -132,7 +132,6 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
         url: newUrl,
         // После получения ответа сервера
         success: function (labels) {
-            console.log(labels);
             var content = '';
             for (let i = 0; i < labels.length; i++) {
                 content += "<div class=\"col-sm-6 col-xl-4\" >";

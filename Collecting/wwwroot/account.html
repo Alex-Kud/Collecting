@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Account :: Login</title>
+    <title>Products</title>
 
     <!--== Favicon ==-->
     <link rel="shortcut icon" href="assets/img/favicon.ico" type="image/x-icon" />
@@ -38,7 +38,19 @@
 
     <!--== Main Style CSS ==-->
     <link href="assets/css/style.css" rel="stylesheet" />
-
+    <style>
+        .onePersonalInfo {
+            margin-bottom: 20px; /* Отступ снизу */
+            color: black;
+        }
+        input, textarea {
+            padding: 8px 8px;
+            border-radius: 10px; 
+        }
+        textarea {
+            width: 60%;
+        }
+    </style>
     <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -82,12 +94,12 @@
                                 <li class="has-submenu">
                                     <a href="blog.html">Blog</a>
                                     <!--<ul class="submenu-nav">
-                                  <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                  <li><a href="blog.html">Blog Right Sidebar</a></li>
-                                  <li><a href="blog-grid.html">Blog Grid Layout</a></li>
-                                  <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
-                                  <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
-                                </ul>-->
+                                      <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
+                                      <li><a href="blog.html">Blog Right Sidebar</a></li>
+                                      <li><a href="blog-grid.html">Blog Grid Layout</a></li>
+                                      <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
+                                      <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
+                                    </ul>-->
                                 </li>
                                 <li><a href="contact.html">Contact</a></li>
                                 <li><a href="about-us.html">About</a></li>
@@ -114,38 +126,38 @@
                                         <span class="cart-quantity" id="cartQuantity">2</span>
                                     </a>
                                     <!--
-                                <div class="mini-cart-dropdown">
-                                    <div class="cart-item">
-                                        <div class="thumb">
-                                            <img class="w-100" src="assets/img/shop/cart/1.jpg" alt="Image-HasTech">
+                                    <div class="mini-cart-dropdown">
+                                        <div class="cart-item">
+                                            <div class="thumb">
+                                                <img class="w-100" src="assets/img/shop/cart/1.jpg" alt="Image-HasTech">
+                                            </div>
+                                            <div class="content">
+                                                <h5 class="title"><a href="#/">Literature Classical - s</a></h5>
+                                                <span class="product-quantity">1 ×</span>
+                                                <span class="product-price">$79.00</span>
+                                                <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
+                                            </div>
                                         </div>
-                                        <div class="content">
-                                            <h5 class="title"><a href="#/">Literature Classical - s</a></h5>
-                                            <span class="product-quantity">1 ×</span>
-                                            <span class="product-price">$79.00</span>
-                                            <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
+                                        <div class="cart-item">
+                                            <div class="thumb">
+                                                <img class="w-100" src="assets/img/shop/cart/2.jpg" alt="Image-HasTech">
+                                            </div>
+                                            <div class="content">
+                                                <h5 class="title"><a href="#/">Fit Wool Suit - m / gold</a></h5>
+                                                <span class="product-quantity">1 ×</span>
+                                                <span class="product-price">$80.00</span>
+                                                <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="cart-total-money">
+                                            <h5>Total: <span class="money">$159.00</span></h5>
+                                        </div>
+                                        <div class="cart-btn">
+                                            <a href="cart.html">View Cart</a>
+                                            <a href="checkout.html">Checkout</a>
                                         </div>
                                     </div>
-                                    <div class="cart-item">
-                                        <div class="thumb">
-                                            <img class="w-100" src="assets/img/shop/cart/2.jpg" alt="Image-HasTech">
-                                        </div>
-                                        <div class="content">
-                                            <h5 class="title"><a href="#/">Fit Wool Suit - m / gold</a></h5>
-                                            <span class="product-quantity">1 ×</span>
-                                            <span class="product-price">$80.00</span>
-                                            <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="cart-total-money">
-                                        <h5>Total: <span class="money">$159.00</span></h5>
-                                    </div>
-                                    <div class="cart-btn">
-                                        <a href="cart.html">View Cart</a>
-                                        <a href="checkout.html">Checkout</a>
-                                    </div>
-                                </div>
-                                -->
+                                    -->
                                 </li>
                             </ul>
                         </div>
@@ -179,49 +191,101 @@
                 </div>
             </div>
             <!--== End Page Header Area Wrapper ==-->
-            <!--== Start Account Area Wrapper ==-->
-            <section class="account-area">
+            <!--== Start Product Area Wrapper ==-->
+            <section class="product-area product-inner-area">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-6 col-md-8 m-auto">
-                            <div class="account-form-wrap">
-                                <!--== Start Login Form ==-->
-                                <div class="login-form">
-                                    <div class="content">
-                                        <h4 class="title">Login</h4>
-                                        <p>Please login using account detail bellow.</p>
+                        <div class="col-lg-8">
+                            <div class="product-body-wrap" id="personalData">
+                                <h3>Personal data</h3>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 onePersonalInfo">
+                                        <span class="widget-title" style="color: black;">Name</span><br />
+                                        <input type="text" placeholder="Name" id="userName" />
                                     </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <input class="form-control" id="login-email" type="email" placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-group">
-                                                <input class="form-control" id="login-password" type="password" placeholder="Password">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="login-form-group">
-                                                <button class="btn-sign" type="submit" id="signin">Sign In</button>
-                                                <a class="btn-pass-forgot" href="#/">Forgot your password?</a>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="account-optional-group">
-                                                <a class="btn-create" href="/reg.html">Create account</a>
-                                            </div>
+                                    <div class="col-lg-6 col-md-6 onePersonalInfo">
+                                        <span class="widget-title">Country</span><br />
+                                        <input type="text" placeholder="Country" id="userCountry" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 onePersonalInfo">
+                                        <span class="widget-title" style="">Surname</span><br />
+                                        <input type="text" placeholder="Surname" id="userSurname" />
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 onePersonalInfo">
+                                        <span class="widget-title">Index</span><br />
+                                        <input type="text" placeholder="Index" id="userIndex" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 onePersonalInfo">
+                                        <span class="widget-title">Email</span><br />
+                                        <input type="email" placeholder="Email" id="userEmail" />
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 onePersonalInfo">
+                                        <span class="widget-title">Address</span><br />
+                                        <textarea rows="3" style="resize: none;" placeholder="Address" id="userAddress"></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <a class="proceed-to-checkout-btn active" onclick="javascript:updateUser()">Update personal data</a>
+                                </div>
+                            </div>
+                            <div class="product-body-wrap" id="myOrders" style="display: none">
+                                <h3>My orders</h3>
+                                <div id="emptyOrders"></div>
+                                <div class="shopping-cart-wrap" id="orderList">
+                                    <div class="cart-table table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="ordersList"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-body-wrap" id="addSricker" style="display: none">
+                                <h3>Adding a sticker</h3>
+                            </div>
+                            <div class="product-body-wrap" id="allUsers" style="display: none">
+                                <h3>User settings</h3>
+                                <div id="emptyAllUsers"></div>
+                            </div>
+                            <div class="product-body-wrap" id="allOrders" style="display: none">
+                                <h3>Order settings</h3>
+                                <div id="emptyAllOrders"></div>
+                                <div class="shopping-cart-wrap" id="orderAllList">
+                                    <div id="list"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <!--== Start Sidebar Area ==-->
+                            <div class="sidebar-area inner-left-padding">
+                                <div class="widget-item">
+                                    <div class="widget-title">
+                                        <h3 class="title">User features</h3>
+                                    </div>
+                                    <div class="widget-body">
+                                        <div class="widget-categories">
+                                            <ul id="features">
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                                <!--== End Login Form ==-->
                             </div>
+                            <!--== End Sidebar Area ==-->
                         </div>
                     </div>
                 </div>
             </section>
-            <!--== End Account Area Wrapper ==-->
+            <!--== End Product Area Wrapper ==-->
         </main>
 
         <!--== Start Footer Area Wrapper ==-->
@@ -361,19 +425,14 @@
     <script src="assets/js/fancybox.min.js"></script>
     <!--=== jQuery Slick Nav Js ===-->
     <script src="assets/js/slicknav.js"></script>
+    <!--=== jQuery Countdown Js ===-->
+    <script src="assets/js/countdown.js"></script>
 
     <!--=== jQuery Custom Js ===-->
     <script src="assets/js/custom.js"></script>
-    <!--=== My Js ===-->
-    <script src="assets/js/login.js"></script>
-    <script>
-        if (sessionStorage.getItem("accessToken") != null) {
-            window.location.href = "account.html";
-        }
-        else {
-            $("#miniСart").css("display", "none");
-        }
-    </script>
-</body>
 
+    <!--=== My Js ===-->
+    <script src="assets/js/account.js"></script>
+    <script src="assets/js/header.js"></script>
+</body>
 </html>

@@ -2,10 +2,8 @@
 using Collecting.Data;
 using Collecting.Data.DTO;
 using Collecting.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace Collecting.Controllers
 {
@@ -375,11 +373,11 @@ namespace Collecting.Controllers
             return BadRequest("Некорректные данные");
         }
 
-        // POST: Stickers/Edit/5
-        [HttpPost("{id}")]
-        public async Task<IActionResult> Edit(int id, StickerDTO stickerDto)
+        // PUT: Stickers/Edit
+        [HttpPut]
+        public async Task<IActionResult> Edit(StickerDTO stickerDto)
         {
-            if (id != stickerDto.Id || stickerDto == null)
+            if (stickerDto == null)
             {
                 return NotFound();
             }
