@@ -88,7 +88,7 @@ namespace Collecting.Controllers
             {
                 return BadRequest("Некорректные данные");
             }
-
+            user.Role = Roles.User;
             Cart cart = new()
             {
                 UserId = user.Id,
@@ -194,7 +194,7 @@ namespace Collecting.Controllers
         /// </summary>
         /// <param name="id">id пользователя</param>
         /// <returns>Сообщение с результатом удаление (успешно или нет)</returns>
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

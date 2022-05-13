@@ -30,7 +30,7 @@ $.ajax({
         $('#features').append(content);
 
         // Обычный пользователь
-        if (user.role == 1) {
+        if (user.role == 0) {
             let content1 = $(`<li id="1feature" class=""><a>My orders<span class="fa fa-angle-double-right"></span></a></li>`);
             content1.on('click', function () {
                 $(`#${(currentFeature)}feature`).removeClass('active');
@@ -47,7 +47,7 @@ $.ajax({
         }
 
         // Коллекционер-модератор
-        if (user.role == 2) {
+        if (user.role == 1) {
             let content1 = $(`<li id="1feature" class=""><a>Add a sticker<span class="fa fa-angle-double-right"></span></a></li>`);
             content1.on('click', function () {
                 $(`#${(currentFeature)}feature`).removeClass('active');
@@ -74,7 +74,7 @@ $.ajax({
         }
 
         // Администратор
-        if (user.role == 3) {
+        if (user.role == 2) {
             let content1 = $(`<li id="1feature" class=""><a>User settings<span class="fa fa-angle-double-right"></span></a></li>`);
             content1.on('click', function () {
                 $(`#${(currentFeature)}feature`).removeClass('active');
@@ -209,6 +209,74 @@ function addSticker() {
 
 function getUsers() {
     console.log("Список всех пользователей");
+
+    // Отправка запроса на сервер
+    $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        headers: { "Authorization": "Bearer " + sessionStorage.getItem("accessToken") },
+        url: "../api/Users/All",
+        // После получения ответа сервера
+        success: function (users) {
+            console.log(users);
+            if (users.length == 0) {
+                $('#emptyUsers').html("<span>There are no users. You're a magician if you saw this.</span><a href=\"registration.html\">Register ?</a>")
+                $('#userList').css("display", "none");
+            }
+            else {
+                $('#emptyUsers').css("display", "none");
+                $('#userList').css("display", "block");
+                let content = ``;
+                $('#usersList').html(content);
+                for (let i = 0; i < users.length; i++) {
+                    let roleName;
+                    if (users[i].role == 1) roleName = "Collector";
+                    if (users[i].role == 2) roleName = "Admin";
+                    else roleName = "User";
+                    content = `
+                    <tr>
+                        <td class="indecor-product-remove">
+                            <a href="javascript:removeUser(${users[i].id})"> <i class="fa fa-times"></i></a>
+                        </td>
+                        <td class="indecor-product-name">
+                            <h4 class="title"> <a>${users[i].id}</a></h4>
+                        </td>
+                        <td class="indecor-product-name">
+                            <h4 class="title"> <a>${users[i].name} ${users[i].surname}</a></h4>
+                        </td>
+                        <td class="indecor-product-name">
+                            <h4 class="title"> <a>${users[i].address}, ${users[i].country}, ${users[i].index}</a></h4>
+                        </td>
+                        <td class="indecor-product-name">
+                            <h4 class="title"> <a>${users[i].email}</a></h4>
+                        </td>
+                        <td class="indecor-product-name">
+                            <h4 class="title"> <a>${users[i].password}</a></h4>
+                        </td>
+                        <td class="indecor-product-name">
+                            <h4 class="title"> <a id="roleName${i}">${roleName}</a></h4>
+                        </td>
+                        <td class="indecor-product-name">
+                            <select id="newRole${i}">
+                                <option disabled>Сhoose a role</option>
+                                <option value="0">User</option>
+                                <option value="1">Collector</option>
+                                <option value="2">Admin</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <script>
+                    $('#newRole${i}').change(function () {
+                        $(this).find(":selected").each(function () {
+                            roleUpdate(${users[i].id}, $(this).val(), $(this).text(), ${i});
+                        });
+                    });
+                    </script>`;
+                    $('#usersList').append(content);
+                }
+            }
+        }
+    });
 }
 
 function getOrders() {
@@ -330,6 +398,45 @@ function changeStatus(id, status, i) {
 
             $(`#status${i}`).text(`Status: ${statusText}`);
             $(`#statusa${i}`).attr("href", `javascript:changeStatus(${id}, ${status}, ${i})`);
+        }
+    });
+}
+
+function removeUser(id) {
+    if (id == currentUser.id) {
+        console.log("You can't delete your own account");
+        return;
+    }
+    // Отправка запроса на сервер
+    $.ajax({
+        type: 'DELETE',
+        dataType: 'json',
+        headers: {
+            "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
+            "Content-type": "application/json"
+        },
+        url: "../api/Users/Delete/" + id,
+        // После получения ответа сервера
+        success: function (result) {
+            getUsers();
+        }
+    });
+}
+
+function roleUpdate(id, newRole, textRole, i) {
+    console.log("id: " + id + ", newRole: " + newRole + ", textRole: " + textRole + ", i: " + i);
+    // Отправка запроса на сервер
+    $.ajax({
+        type: 'PUT',
+        dataType: 'json',
+        headers: {
+            "Authorization": "Bearer " + sessionStorage.getItem("accessToken"),
+            "Content-type": "application/json"
+        },
+        url: "../api/Users/ChangeRole/" + id + "/" + newRole,
+        // После получения ответа сервера
+        success: function (result) {
+            $(`#roleName${i}`).val(textRole);
         }
     });
 }
