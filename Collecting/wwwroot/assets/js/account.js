@@ -436,7 +436,7 @@ function roleUpdate(id, newRole, textRole, i) {
         url: "../api/Users/ChangeRole/" + id + "/" + newRole,
         // После получения ответа сервера
         success: function (result) {
-            $(`#roleName${i}`).val(textRole);
+            $(`#roleName${i}`).text(textRole);
         }
     });
 }
