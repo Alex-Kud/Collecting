@@ -173,7 +173,7 @@ namespace Collecting.Controllers
                     throw;
                 }
             }
-            
+
             return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 

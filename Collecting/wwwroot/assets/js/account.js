@@ -205,11 +205,34 @@ function getHistory() {
 
 function addSticker() {
     console.log("Добавление наклейки");
+    // Настройка работы кнопки добавления
+    $('#addSticker').on('click', function () {
+        console.log("Клик");
+        var files = $('#fileUpload').prop("files");
+        var url = "/api/Stickers/UploadImage";
+        formData = new FormData();
+        //formData.append("MyUploader", files[0]);
+        formData.append("uploadedFile", files[0]);
+        jQuery.ajax({
+            type: 'POST',
+            url: url,
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (repo) {
+                if (repo.status == "success") {
+                    alert("File : " + repo.path + " is uploaded successfully");
+                }
+            },
+            error: function () {
+                alert("Error occurs");
+            }
+        });
+    });
 }
 
 function getUsers() {
-    console.log("Список всех пользователей");
-
     // Отправка запроса на сервер
     $.ajax({
         type: 'GET',
@@ -220,7 +243,7 @@ function getUsers() {
         success: function (users) {
             console.log(users);
             if (users.length == 0) {
-                $('#emptyUsers').html("<span>There are no users. You're a magician if you saw this.</span><a href=\"registration.html\">Register ?</a>")
+                $('#emptyUsers').html("<span>There are no users. You're a magician if you saw this.</span><a href=\"reg.html\">Register ?</a>")
                 $('#userList').css("display", "none");
             }
             else {

@@ -1,18 +1,15 @@
-﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Collecting.Data;
-using Collecting.Data.Models;
+﻿using Collecting.Data;
 using System.Text.Json;
-using Collecting.Middleware;
+using Collecting.Data.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Collecting.Controllers
 {
+    /// <summary>
+    /// Контроллер действий над пользователями
+    /// </summary>
     [Authorize]
     [ApiController]
     [Produces("application/json")]
@@ -20,12 +17,18 @@ namespace Collecting.Controllers
     public class UsersController : Controller
     {
         private readonly StickersContext _context;
-        private readonly User _user;
+        private readonly User? _user;
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
+        /// <param name="httpContextAccessor">Контекст http</param>
         public UsersController(StickersContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            _user = JsonSerializer.Deserialize<User>(httpContextAccessor.HttpContext.Session.GetString("User"));
+            var userSess = httpContextAccessor.HttpContext.Session.GetString("User");
+            _user = userSess != null ? JsonSerializer.Deserialize<User>(userSess) : null;
         }
 
         // GET: Users/All
@@ -81,6 +84,7 @@ namespace Collecting.Controllers
         /// </summary>
         /// <param name="user">Данные пользователя</param>
         /// <returns>Созданный пользователь</returns>
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Create(User user)
         {
@@ -164,7 +168,7 @@ namespace Collecting.Controllers
             user.Email = newUser.Email;
             user.Country = newUser.Country;
             user.Index = newUser.Index;
-            user.Name = newUser.Name; 
+            user.Name = newUser.Name;
             user.Role = newUser.Role;
             user.Password = newUser.Password;
 

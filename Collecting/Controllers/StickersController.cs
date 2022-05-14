@@ -13,10 +13,11 @@ namespace Collecting.Controllers
     public class StickersController : Controller
     {
         private readonly StickersContext _context;
-
-        public StickersController(StickersContext context)
+        private readonly IWebHostEnvironment _appEnvironment;
+        public StickersController(StickersContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         // GET: Stickers/All
@@ -337,6 +338,27 @@ namespace Collecting.Controllers
         public async Task<ActionResult<IEnumerable<StickerDTO>>> AllQuantity()
         {
             return new JsonResult(new { quantity = await _context.StickersDb.CountAsync() })
+            {
+                StatusCode = StatusCodes.Status200OK
+            };
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UploadImage([FromForm] FormFile uploadedFile)
+        {
+            string path = "/assets/img/stickers/NotFound.png";
+            if (uploadedFile != null)
+            {
+                // путь к изображению
+                path = $@"/assets/img/stickers/{DateTime.Now.Ticks}.png";
+                // сохраняем файл в папку в каталоге wwwroot
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    await uploadedFile.CopyToAsync(fileStream);
+                }
+            }
+
+            return new JsonResult(new { path = path })
             {
                 StatusCode = StatusCodes.Status200OK
             };

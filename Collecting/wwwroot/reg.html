@@ -38,7 +38,21 @@
 
     <!--== Main Style CSS ==-->
     <link href="assets/css/style.css" rel="stylesheet" />
+    <style>
+        .onePersonalInfo {
+            margin-bottom: 20px; /* Отступ снизу */
+            color: black;
+        }
 
+        input, textarea {
+            padding: 8px 8px;
+            border-radius: 10px;
+        }
+
+        textarea {
+            width: 60%;
+        }
+    </style>
     <!--[if lt IE 9]>
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -191,51 +205,59 @@
                                         <h4 class="title">Registration</h4>
                                         <p>Please registration using account detail bellow.</p>
                                     </div>
-                                    <form action="#">
+
                                         <div class="row">
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" placeholder="Name">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Name</span><br />
+                                                    <input class="form-control" placeholder="Name" id="name">
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" placeholder="Surname">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Surname</span><br />
+                                                    <input class="form-control" placeholder="Surname" id="surname">
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" placeholder="Country">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Country</span><br />
+                                                    <input class="form-control" placeholder="Country" id="country">
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" placeholder="Address">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Address</span><br />
+                                                    <input class="form-control" placeholder="Address" id="address">
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" placeholder="Index">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Index</span><br />
+                                                    <input class="form-control" placeholder="Index" id="index">
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="email" placeholder="Email">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Email</span><br />
+                                                    <input class="form-control" type="email" placeholder="Email" id="email">
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="password" placeholder="Password">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Password</span><br />
+                                                    <input class="form-control" type="password" placeholder="Password" id="password">
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                <div class="form-group">
-                                                    <input class="form-control" type="password" placeholder="Password">
+                                                <div class="form-group onePersonalInfo">
+                                                    <span class="widget-title">Repeat password</span><br />
+                                                    <input class="form-control" type="password" placeholder="Repeat password" id="passwordRepeat">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 <div class="login-form-group">
-                                                    <button class="btn-sign" type="submit">Create account</button>
+                                                    <button class="btn-sign" type="submit" id="reg">Create account</button>
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -244,7 +266,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </form>
+
                                 </div>
                                 <!--== End Login Form ==-->
                             </div>
@@ -451,7 +473,8 @@
 
     <!--=== jQuery Custom Js ===-->
     <script src="assets/js/custom.js"></script>
-
+    <!--=== My Js ===-->
+    <script src="assets/js/reg.js"></script>
     <script src="assets/js/header.js"></script>
 
 </body>
