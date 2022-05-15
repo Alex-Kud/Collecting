@@ -12,7 +12,6 @@ if (token != null) {
         url: "../api/Carts/QuantityUser",
         // После получения ответа сервера
         success: function (result) {
-            console.log(result.quantity);
             $("#cartQuantity").html(result.quantity);
         }
     });
@@ -23,6 +22,5 @@ else {
 
 function logout() {
     sessionStorage.removeItem("accessToken");
-    console.log(sessionStorage.getItem("accessToken"));
     window.location.href = "login.html";
 }

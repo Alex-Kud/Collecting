@@ -38,6 +38,7 @@ function init() {
         first(0, "При поиске", "search");
     });
 }
+
 function first(idCategory, flag, type) {
     let newUrl;
     if (type == "category")
@@ -134,39 +135,78 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
         success: function (labels) {
             var content = '';
             for (let i = 0; i < labels.length; i++) {
-                content += "<div class=\"col-sm-6 col-xl-4\" >";
-                content += "<!--== Start Shop Item == -->";
-                content += "<div class=\"product-item\">";
-                content += "<div class=\"inner-content\">";
-                content += "<div class=\"product-thumb\">";
-                content += "<a href=\"single-product-simple.html\">";
-                content += "<img class=\"w-100\" src=\"assets/img/shop/2.jpg\" alt=\"Image-HasTech\">";
-                content += "</a>";
-                content += "<div class=\"product-action\">";
-                content += "<div class=\"addto-wrap\">";
-                content += "<a class=\"add-cart\" href=\"javascript:AddToCart(" + labels[i]["id"] + ", 1)\">";
-                content += "<i class=\"zmdi zmdi-shopping-cart-plus icon\"></i>";
-                content += "</a>";
-                content += "<a class=\"add-quick-view id=\"viewItem\"\" href=\"javascript:wow(" + labels[i]["id"] + ");\">"
-                content += "<i class=\"zmdi zmdi-search icon\"></i>"
-                content += "</a>"
-                content += "</div>";
-                content += "</div>";
-                content += "</div>";
-                content += "<div class=\"product-desc\">";
-                content += "<div class=\"product-info\">";
-                content += "<h4 class=\"title\"><a href=\"single-product.html\">" + labels[i]["firm"] + "</a></h4>";
-                content += "<div class=\"prices\">";
-                content += "<span class=\"price\">Price: " + labels[i]["price"] + " sticker</span>";
-                content += "</div>";
-                content += "</div>";
-                content += "</div>";
-                content += "</div>";
-                content += "</div>";
-                content += "<!--== End Shop Item == -->";
-                content += "</div>";
+                content = `
+                        <div class="col-sm-6 col-xl-4">
+                          <!--== Start Shop Item ==-->
+                          <div class="product-item">
+                            <div class="inner-content">
+                              <div class="product-thumb">
+                                <a href="single-product-simple.html">
+                                  <img class="w-100" src="assets/img/shop/17.jpg" alt="Image-HasTech">
+                                </a>
+                                <div class="product-action">
+                                  <div class="addto-wrap">
+                                    <a class="add-cart" href="javascript:AddToCart(${labels[i]["id"]}, 1)">
+                                      <i class="zmdi zmdi-shopping-cart-plus icon"></i>
+                                    </a>
+                                    <a class="add-quick-view" href="javascript:wow(${labels[i]["id"]})">
+                                      <i class="zmdi zmdi-search icon"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="product-desc">
+                                <div class="product-info">
+                                  <h4 class="title"><a>${labels[i]["firm"]}</a></h4>
+                                  <div class="prices">
+                                    <span class="price">${labels[i]["price"]} sticker</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!--== End Shop Item ==-->
+                        </div>`
+                        /* content += `
+                        <div class="col-sm-6 col-xl-4">
+                          <!--== Start Shop Item ==-->
+                          <div class="product-item">
+                            <div class="inner-content">
+                              <div class="product-thumb">
+                                <a href="single-product-simple.html">
+                                  <img class="w-100" src="assets/img/shop/17.jpg" alt="Image-HasTech">
+                                </a>
+                                <div class="product-action">
+                                  <div class="addto-wrap">
+                                    <a class="add-cart" href="cart.html">
+                                      <i class="zmdi zmdi-shopping-cart-plus icon"></i>
+                                    </a>
+                                    <a class="add-quick-view" href="javascript:wow(0);">
+                                      <i class="zmdi zmdi-search icon"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="product-desc">
+                                <div class="product-info">
+                                  <h4 class="title"><a href="single-product-simple.html">This is the large title for testing large title</a></h4>
+                                  <div class="prices">
+                                    <span class="price">$17.00</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <!--== End Shop Item ==-->
+                        </div>`*/
+
+                $('#stickers').append(content); 
             }
-            $('#stickers').html(content);
+            /*
+            $('#aca').attr('hrev', `javascript:AddToCart(${labels[0]["id"]}, 1)`);
+            $('#aqw').attr('hrev', `javascript:wow(${labels[0]["id"]})`);
+            $('#title').text(`${labels[0]["firm"]}`);
+            $('#price').text(`${labels[0]["price"]} sticker`);*/
         }
     });
 }
@@ -208,6 +248,47 @@ function AddToCart(id, quantity) {
 }
 
 function wow(id) {
+    console.log("wow 1");
+    // Отправка запроса на сервер
+    /*let content = `
+        <div class="product-quick-view-inner">
+            <div class="product-quick-view-content">
+                <button type="button" class="btn-close">
+                    <span class="close-icon"><i class="fa fa-close"></i></span>
+                </button>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <div class="thumb">
+                            <img src="assets/img/shop/quick-view1.jpg" alt="Alan-Shop">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="content">
+                                <h4 class="title">33</h4>
+                                <div class="prices">
+                                    <span class="price">33 sticker</span>
+                                </div>
+                                <table>
+                                <tr><th>Year</th><th>Country</th><th>Material</th></tr>
+                                <tr><td>3</td><td>333</td><td>1</td></tr>
+                                <tr><th>Width</th><th>Height</th><th>Max quantity</th></tr>
+                                <tr><td>3</td><td>1</td><td>1</td></tr>
+                                <tr><th>Form</th><th>Text</th><th>Category</th></tr>
+                                <tr><td>3</td><td>1</td><td>1</td></tr>
+                                </table>
+                                <div class="btn-sign-container">
+                                    <a class="btn-sign" href="javascript:getNotification()">To your personal account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-overlay"></div>
+    `;*/
+    /*
     // Отправка запроса на сервер
     $.ajax({
         type: 'GET',
@@ -218,6 +299,7 @@ function wow(id) {
         url: "../api/Stickers/Sticker/" + id,
         // После получения ответа сервера
         success: function (sticker) {
+            console.log("wow 2");
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -269,27 +351,79 @@ function wow(id) {
                             <div class="canvas-overlay"></div>
                         `;
                     $('#popUp').html(content);
+                    console.log("wow 3");
                 }
             });
         }
     });
 
-    $('#overlay').fadeIn(250, function () {
-        $('#popUp')
-            .css('display', 'block')
-            .animate({ opacity: 1, top: '55%' }, 490);
-    });
+    //$('#popUp').html(content);                
 
-    /*по нажатию на крестик закрывать окно*/
-    $('#close, #overlay').click(function () {
-        $('#popUp')
-            .animate({ opacity: 0, top: '35%' }, 490,
-            function () {
-                $(this).css('display', 'none');
-                $('#overlay').fadeOut(220);
-            }
-        );
+    var popupProduct = $(".product-quick-view-modal");
+
+    $(".btn-close, .canvas-overlay").on('click', function() {
+        popupProduct.removeClass('active');
+        $("body").removeClass("fix");
+    });*/
+
+    // Отправка запроса на сервер
+    let content = `
+        <div class="product-quick-view-inner">
+            <div class="product-quick-view-content">
+                <button type="button" class="btn-close">
+                    <span class="close-icon"><i class="fa fa-close"></i></span>
+                </button>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-12">
+                        <div class="thumb">
+                            <img src="assets/img/shop/quick-view1.jpg" alt="Alan-Shop">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-12">
+                            <div class="content">
+                                <h4 class="title">33</h4>
+                                <div class="prices">
+                                    <span class="price">33 sticker</span>
+                                </div>
+                                <table>
+                                <tr><th>Year</th><th>Country</th><th>Material</th></tr>
+                                <tr><td>3</td><td>333</td><td>1</td></tr>
+                                <tr><th>Width</th><th>Height</th><th>Max quantity</th></tr>
+                                <tr><td>3</td><td>1</td><td>1</td></tr>
+                                <tr><th>Form</th><th>Text</th><th>Category</th></tr>
+                                <tr><td>3</td><td>1</td><td>1</td></tr>
+                                </table>
+                                <div class="btn-sign-container">
+                                    <a class="btn-sign" href="javascript:getNotification()">To your personal account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-overlay"></div>
+    `;
+
+    $('#popUp').html(content);
+
+    var popupProduct = $(".product-quick-view-modal");
+
+    $(".btn-close, .canvas-overlay").on('click', function () {
+        popupProduct.removeClass('active');
+        $("body").removeClass("fix");
     });
+}
+
+function getNotification() {
+    var $notification = $('#notification')
+
+    $notification.addClass('show');
+
+    setTimeout(() => {
+        $notification.removeClass('show');
+    }, 2000)
 }
 
 // Настройка работы кнопки увеличения количества товаров

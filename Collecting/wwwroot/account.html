@@ -229,7 +229,9 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <a class="proceed-to-checkout-btn active" onclick="javascript:updateUser()">Update personal data</a>
+                                    <div class="btn-sign-container" style="width: 80%;">
+                                        <a class="btn-sign" style="text-align: center;" onclick="javascript:updateUser()">Update personal data</a>
+                                    </div>
                                 </div>
                             </div>
                             <div class="product-body-wrap" id="myOrders" style="display: none">
@@ -252,7 +254,6 @@
                             </div>
                             <div class="product-body-wrap" id="addSricker" style="display: none">
                                 <h3>Adding a sticker</h3>
-
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group onePersonalInfo">
@@ -269,6 +270,12 @@
                                     <div class="col-12">
                                         <div class="form-group onePersonalInfo">
                                             <span class="widget-title">Country</span><br />
+                                            <input class="form-control" placeholder="Country" id="country">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group onePersonalInfo">
+                                            <span class="widget-title">Material</span><br />
                                             <input class="form-control" placeholder="Material" id="material">
                                         </div>
                                     </div>
@@ -310,16 +317,24 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group onePersonalInfo">
-                                            <input type="file" id="fileUpload">
+                                            <input type="file" id="fileUpload" accept="image/*">
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="login-form-group">
+                                        <div class="form-group onePersonalInfo">
+                                            <span class="widget-title">Category</span><br />
+                                            <select class="form-group onePersonalInfo" id="selectCategory">
+                                                <option disabled>Select a category</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="btn-sign-container">
                                             <button class="btn-sign" type="submit" id="addSticker">Add a sticker</button>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="product-body-wrap" id="allUsers" style="display: none">
                                 <h3>User settings</h3>

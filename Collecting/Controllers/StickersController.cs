@@ -344,7 +344,7 @@ namespace Collecting.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImage([FromForm] FormFile uploadedFile)
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile uploadedFile)
         {
             string path = "/assets/img/stickers/NotFound.png";
             if (uploadedFile != null)

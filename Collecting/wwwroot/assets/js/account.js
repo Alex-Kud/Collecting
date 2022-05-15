@@ -106,6 +106,23 @@ $.ajax({
     }
 });
 
+// Отправка запроса на сервер
+$.ajax({
+    type: 'GET',
+    dataType: 'json',
+    headers: { "Authorization": "Bearer " + sessionStorage.getItem("accessToken") },
+    url: "../api/Categories/All",
+    // После получения ответа сервера
+    success: function (categories) {
+        console.log(categories);
+        content = ``;
+        for (let i = 0; i < categories.length; ++i) {
+            content += ` <option value="${categories[i].id}">${categories[i].name}</option>`
+        }
+        $(`#selectCategory`).append(content);
+    }
+});
+
 async function updateUser() {
     let newUser = {
         address: $('#userAddress').val(),
@@ -203,17 +220,17 @@ function getHistory() {
     });
 }
 
-function addSticker() {
+async function addSticker() {
     console.log("Добавление наклейки");
     // Настройка работы кнопки добавления
-    $('#addSticker').on('click', function () {
-        console.log("Клик");
+    $('#addSticker').on('click', function () {        
+        // Загрузка изображения на сервер
         var files = $('#fileUpload').prop("files");
         var url = "/api/Stickers/UploadImage";
         formData = new FormData();
         //formData.append("MyUploader", files[0]);
         formData.append("uploadedFile", files[0]);
-        jQuery.ajax({
+        $.ajax({
             type: 'POST',
             url: url,
             data: formData,
@@ -221,12 +238,46 @@ function addSticker() {
             contentType: false,
             processData: false,
             success: function (repo) {
-                if (repo.status == "success") {
-                    alert("File : " + repo.path + " is uploaded successfully");
+                console.log("dsf");
+                let sticker = {
+                    id: 0,
+                    firm: $(`#firm`).val(),
+                    year: $(`#year`).val(),
+                    country: $(`#country`).val(),
+                    material: $(`#material`).val(),
+                    width: $(`#width`).val(),
+                    height: $(`#height`).val(),
+                    text: $(`#text`).val(),
+                    quantity: $(`#quantity`).val(),
+                    price: $(`#material`).val(),
+                    form: $(`#material`).val(),
+                    img: repo.path,
+                    additionalImg: "/assets/img/stickers/NotFound.png",
+                    categoryID: $(`#selectCategory`).val()
                 }
+
+                formData = new FormData();
+                formData.append("stickerDTO", sticker);
+                $.ajax({
+                    type: 'POST',
+                    url: "../api/Stickers/Create",
+                    headers: { "Authorization": "Bearer " + sessionStorage.getItem("accessToken") },
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (repo.status == "success") {
+                            console.log(response);
+                        }
+                    },
+                    error: function () {
+                        console.log("Error: ", response.status);
+                    }
+                });
             },
             error: function () {
-                alert("Error occurs");
+                console.log("Error");
             }
         });
     });
@@ -462,4 +513,41 @@ function roleUpdate(id, newRole, textRole, i) {
             $(`#roleName${i}`).text(textRole);
         }
     });
+}
+
+async function createSticker() {
+    let sticker = {
+        id: 0,
+        firm: $(`#firm`).val(),
+        year: $(`#year`).val(),
+        country: $(`#country`).val(),
+        material: $(`#material`).val(),
+        width: $(`#width`).val(),
+        height: $(`#height`).val(),
+        text: $(`#text`).val(),
+        quantity: $(`#quantity`).val(),
+        price: $(`#material`).val(),
+        form: $(`#material`).val(),
+        img: repo.path,
+        additionalImg: "/assets/img/stickers/NotFound.png",
+        categoryID: $(`#selectCategory`).val()
+    }
+
+    // отправляет запрос и получаем ответ
+    const response = await fetch("../api/Stickers/Create", {
+        method: "POST",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(sticker)
+    });
+    // получаем данные 
+    let data = await response.json();
+
+    // если запрос прошел нормально
+    if (response.ok === true) {
+        console.log(data);
+    }
+    else {
+        console.log("Error: ", response.status);
+    }
+    console.log("File : " + repo.path + " is uploaded successfully");
 }
