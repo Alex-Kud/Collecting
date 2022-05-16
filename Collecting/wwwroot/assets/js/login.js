@@ -2,14 +2,13 @@
 // Настройка работы кнопки авторизации
 $('#signin').on('click', function () {
     getTokenAsync();
-    console.log(sessionStorage.getItem(tokenKey));
 });
 
 // отпавка запроса к контроллеру AccountController для получения токена
 async function getTokenAsync() {
     let user = {
-        userEmail: document.getElementById("login-email").value,
-        password: document.getElementById("login-password").value,
+        userEmail: $('#login-email').val(),
+        password: $('#login-password').val(),
     }
 
     // отправляет запрос и получаем ответ
@@ -26,7 +25,6 @@ async function getTokenAsync() {
         // сохраняем в хранилище sessionStorage токен доступа
         sessionStorage.setItem(tokenKey, data.token);
         
-        console.log(sessionStorage.getItem(tokenKey));
         $("#myaccount").attr("href", "account.html");
         $("#account").attr("href", "javascript:my_function()");
         $("#account").html("Logout");
@@ -35,12 +33,12 @@ async function getTokenAsync() {
     else {
         // если произошла ошибка, из errorText получаем текст ошибки
         console.log("Error: ", response.status);
+        let messange = ["Oops. You have entered an incorrect username and/or password"];
+        getNotification(messange);
     }
 };
 
 function logout() {
     sessionStorage.removeItem(tokenKey);
-    console.log(sessionStorage.getItem(tokenKey));
-    alert("Птерадактиль");
     window.location.href = "login.html";
 }

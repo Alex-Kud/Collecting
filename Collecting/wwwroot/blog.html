@@ -158,7 +158,7 @@
         </header>
         <!--== End Header Wrapper ==-->
 
-        <main class="main-content">
+        <main class="main-content" style="display: none">
             <!--== Start Page Header Area Wrapper ==-->
             <div class="page-header-area">
                 <div class="container">
@@ -478,6 +478,7 @@
         <!--== End Footer Area Wrapper ==-->
         <!--== Scroll Top Button ==-->
         <div id="scroll-to-top" class="scroll-to-top"><span class="fa fa-angle-double-up"></span></div>
+        <div id="notification" class="notification"></div>
 
         <!--== Start Side Menu ==-->
         <aside class="off-canvas-wrapper">
@@ -528,9 +529,13 @@
 
     <!--=== jQuery Custom Js ===-->
     <script src="assets/js/custom.js"></script>
-
     <script src="assets/js/header.js"></script>
-    <script>alert("At the moment page blog's developing");</script>
+    <script>
+
+        let messange = ["Sorry, the section is under development. Please come back later"];
+        getNotification(messange);
+
+    </script>
 </body>
 
 </html>

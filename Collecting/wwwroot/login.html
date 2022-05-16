@@ -82,12 +82,12 @@
                                 <li class="has-submenu">
                                     <a href="blog.html">Blog</a>
                                     <!--<ul class="submenu-nav">
-                                  <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
-                                  <li><a href="blog.html">Blog Right Sidebar</a></li>
-                                  <li><a href="blog-grid.html">Blog Grid Layout</a></li>
-                                  <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
-                                  <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
-                                </ul>-->
+                                      <li><a href="blog-left-sidebar.html">Blog Left Sidebar</a></li>
+                                      <li><a href="blog.html">Blog Right Sidebar</a></li>
+                                      <li><a href="blog-grid.html">Blog Grid Layout</a></li>
+                                      <li><a href="single-blog.html">Single Blog Left Sidebar</a></li>
+                                      <li><a href="single-blog-right-sidebar.html">Single Blog Right Sidebar</a></li>
+                                    </ul>-->
                                 </li>
                                 <li><a href="contact.html">Contact</a></li>
                                 <li><a href="about-us.html">About</a></li>
@@ -114,38 +114,38 @@
                                         <span class="cart-quantity" id="cartQuantity">2</span>
                                     </a>
                                     <!--
-                                <div class="mini-cart-dropdown">
-                                    <div class="cart-item">
-                                        <div class="thumb">
-                                            <img class="w-100" src="assets/img/shop/cart/1.jpg" alt="Image-HasTech">
+                                    <div class="mini-cart-dropdown">
+                                        <div class="cart-item">
+                                            <div class="thumb">
+                                                <img class="w-100" src="assets/img/shop/cart/1.jpg" alt="Image-HasTech">
+                                            </div>
+                                            <div class="content">
+                                                <h5 class="title"><a href="#/">Literature Classical - s</a></h5>
+                                                <span class="product-quantity">1 ×</span>
+                                                <span class="product-price">$79.00</span>
+                                                <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
+                                            </div>
                                         </div>
-                                        <div class="content">
-                                            <h5 class="title"><a href="#/">Literature Classical - s</a></h5>
-                                            <span class="product-quantity">1 ×</span>
-                                            <span class="product-price">$79.00</span>
-                                            <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
+                                        <div class="cart-item">
+                                            <div class="thumb">
+                                                <img class="w-100" src="assets/img/shop/cart/2.jpg" alt="Image-HasTech">
+                                            </div>
+                                            <div class="content">
+                                                <h5 class="title"><a href="#/">Fit Wool Suit - m / gold</a></h5>
+                                                <span class="product-quantity">1 ×</span>
+                                                <span class="product-price">$80.00</span>
+                                                <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="cart-total-money">
+                                            <h5>Total: <span class="money">$159.00</span></h5>
+                                        </div>
+                                        <div class="cart-btn">
+                                            <a href="cart.html">View Cart</a>
+                                            <a href="checkout.html">Checkout</a>
                                         </div>
                                     </div>
-                                    <div class="cart-item">
-                                        <div class="thumb">
-                                            <img class="w-100" src="assets/img/shop/cart/2.jpg" alt="Image-HasTech">
-                                        </div>
-                                        <div class="content">
-                                            <h5 class="title"><a href="#/">Fit Wool Suit - m / gold</a></h5>
-                                            <span class="product-quantity">1 ×</span>
-                                            <span class="product-price">$80.00</span>
-                                            <a class="cart-trash" href="javascript:void(0);"><i class="fa fa-trash"></i></a>
-                                        </div>
-                                    </div>
-                                    <div class="cart-total-money">
-                                        <h5>Total: <span class="money">$159.00</span></h5>
-                                    </div>
-                                    <div class="cart-btn">
-                                        <a href="cart.html">View Cart</a>
-                                        <a href="checkout.html">Checkout</a>
-                                    </div>
-                                </div>
-                                -->
+                                    -->
                                 </li>
                             </ul>
                         </div>
@@ -302,6 +302,7 @@
         <!--== End Footer Area Wrapper ==-->
         <!--== Scroll Top Button ==-->
         <div id="scroll-to-top" class="scroll-to-top"><span class="fa fa-angle-double-up"></span></div>
+        <div id="notification" class="notification"></div>
 
         <!--== Start Side Menu ==-->
         <aside class="off-canvas-wrapper">
@@ -353,14 +354,23 @@
     <!--=== jQuery Custom Js ===-->
     <script src="assets/js/custom.js"></script>
     <!--=== My Js ===-->
+    <script src="assets/js/header.js"></script>
     <script src="assets/js/login.js"></script>
     <script>
-        if (sessionStorage.getItem("accessToken") != null) {
-            window.location.href = "account.html";
-        }
-        else {
-            $("#miniСart").css("display", "none");
-        }
+        // Отправка запроса на сервер
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            headers: { "Authorization": "Bearer " + token },
+            url: "../api/Auth/GetResult",
+            // После получения ответа сервера
+            success: function (result) {
+                window.location.href = "account.html";
+            },
+            error: function (result) {
+                $("#miniСart").css("display", "none");
+            }
+        });
     </script>
 </body>
 

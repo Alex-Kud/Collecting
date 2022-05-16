@@ -356,9 +356,16 @@
     <script src="assets/js/cart.js"></script>
     <script src="assets/js/header.js"></script>
     <script>
-        if (sessionStorage.getItem("accessToken") == null) {
+        // Редирект на авторизацию для неавторизованных пользователей
+        $.ajax({
+            type: 'GET',
+        dataType: 'json',
+        headers: {"Authorization": "Bearer " + token },
+        url: "../api/Auth/GetResult",
+        error: function (result) {
             window.location.href = "login.html";
-        }
+            }
+        });
     </script>
 </body>
 

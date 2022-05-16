@@ -39,6 +39,8 @@ async function registration() {
     else {
         // если произошла ошибка, из errorText получаем текст ошибки
         console.log("Error: ", response.status);
+        let messange = ["Oops. It seems that you have entered incorrect data"];
+        getNotification(messange);
     }
 }
 
@@ -73,5 +75,7 @@ async function getTokenAsync() {
     else {
         // если произошла ошибка, из errorText получаем текст ошибки
         console.log("Error: ", response.status);
+        let messange = ["Oops. It seems that you have entered incorrect data"];
+        getNotification(messange);
     }
 };

@@ -88,10 +88,11 @@ namespace Collecting.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(User user)
         {
-            if (user == null)
+            if (user == null || user.Email == null || _context.UsersDb.Any(u => u.Email == user.Email))
             {
                 return BadRequest("Некорректные данные");
             }
+
             user.Role = Roles.User;
             Cart cart = new()
             {

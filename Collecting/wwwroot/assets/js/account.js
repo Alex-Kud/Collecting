@@ -355,7 +355,8 @@ function getOrders() {
                         url: "../api/Carts/TotalPrice/" + orders[i].cartId,
                         // После получения ответа сервера
                         success: function (result) {
-                            $('#list').append(`
+
+                            $('#list').html(`
                             <div style="background:#f6f6f6; border: 2px solid #efefef; border-radius: 10px;">
                             <div id="generalInformation${i}">
                                 <span>Date: ${date}</span><br>

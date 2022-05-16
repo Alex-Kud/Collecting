@@ -287,27 +287,25 @@ function wow(id) {
     });
 }
 
-function getNotification() {
-    var $notification = $('#notification')
-
-    $notification.addClass('show');
-
-    setTimeout(() => {
-        $notification.removeClass('show');
-    }, 2000)
-}
-
 // Настройка работы кнопки увеличения количества товаров
 function countPlus(id, quantity) {
     let old = Number($(`#quantity${id}`).attr("value"));
     if ((old + 1) <= quantity) {
         $(`#quantity${id}`).attr("value", (old + 1));
     }
+    else {
+        let messange = ["The selection exceeds the number of existing duplicates"];
+        getNotification(messange);
+    }
 }
 
 // Настройка работы кнопки уменьшения количества товаров
 function countMinus(id) {
     let old = Number($(`#quantity${id}`).attr("value"));
-    if ((old - 1) > 0)
-    $(`#quantity${id}`).attr("value", (old - 1));
+    if ((old - 1) > 0) {
+        $(`#quantity${id}`).attr("value", (old - 1));
+    } else {
+        let messange = ["You can't add less than 1 sticker to the cart"];
+        getNotification(messange)
+    }
 }
