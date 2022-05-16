@@ -357,7 +357,7 @@ function getOrders() {
                         success: function (result) {
 
                             $('#list').html(`
-                            <div style="background:#f6f6f6; border: 2px solid #efefef; border-radius: 10px;">
+                            <div style="background:#FAF0AD; border: 2px solid #FFE573; border-radius: 10px;">
                             <div id="generalInformation${i}">
                                 <span>Date: ${date}</span><br>
                                 <span>Price: ${result.price}</span><br>
