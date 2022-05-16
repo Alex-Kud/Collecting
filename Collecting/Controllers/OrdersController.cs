@@ -135,6 +135,14 @@ namespace Collecting.Controllers
                 {
                     return NotFound();
                 }
+                tempCart.Items = await _context.CartItemsDb.Where(_item => _item.CartId == tempCart.Id).ToListAsync();
+                foreach (var item in tempCart.Items)
+                {
+                    item.Sticker = await _context.StickersDb.FindAsync(item.StickerId);
+                    item.Sticker.Quantity -= item.Quantity;
+                }
+                await _context.SaveChangesAsync();
+
                 Order order = new()
                 {
                     CartId = _user.CartId,

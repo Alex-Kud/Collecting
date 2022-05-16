@@ -228,7 +228,6 @@ async function addSticker() {
         var files = $('#fileUpload').prop("files");
         var url = "/api/Stickers/UploadImage";
         formData = new FormData();
-        //formData.append("MyUploader", files[0]);
         formData.append("uploadedFile", files[0]);
         $.ajax({
             type: 'POST',
@@ -238,43 +237,7 @@ async function addSticker() {
             contentType: false,
             processData: false,
             success: function (repo) {
-                console.log("dsf");
-                let sticker = {
-                    id: 0,
-                    firm: $(`#firm`).val(),
-                    year: $(`#year`).val(),
-                    country: $(`#country`).val(),
-                    material: $(`#material`).val(),
-                    width: $(`#width`).val(),
-                    height: $(`#height`).val(),
-                    text: $(`#text`).val(),
-                    quantity: $(`#quantity`).val(),
-                    price: $(`#material`).val(),
-                    form: $(`#material`).val(),
-                    img: repo.path,
-                    additionalImg: "/assets/img/stickers/NotFound.png",
-                    categoryID: $(`#selectCategory`).val()
-                }
-
-                formData = new FormData();
-                formData.append("stickerDTO", sticker);
-                $.ajax({
-                    type: 'POST',
-                    url: "../api/Stickers/Create",
-                    headers: { "Authorization": "Bearer " + sessionStorage.getItem("accessToken") },
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        if (repo.status == "success") {
-                            console.log(response);
-                        }
-                    },
-                    error: function () {
-                        console.log("Error: ", response.status);
-                    }
-                });
+                createSticker(repo.path);
             },
             error: function () {
                 console.log("Error");
@@ -427,7 +390,7 @@ function getOrders() {
                                             <h4 class="title"> <a>${orders[i].cart.items[j].sticker.id}</a></h4>
                                         </td>
                                         <td class="indecor-product-thumbnail" >
-                                            <a><img src="assets/img/shop/cart/table1.jpg" alt="Image-HasTech"></a>
+                                            <a><img src="${orders[i].cart.items[j].sticker.img}" alt="Image-HasTech"></a>
                                         </td>
                                         <td class="indecor-product-name">
                                             <h4 class="title"> <a>${orders[i].cart.items[j].sticker.text}</a></h4>
@@ -515,7 +478,8 @@ function roleUpdate(id, newRole, textRole, i) {
     });
 }
 
-async function createSticker() {
+async function createSticker(path) {
+    console.log("dsf");
     let sticker = {
         id: 0,
         firm: $(`#firm`).val(),
@@ -526,17 +490,21 @@ async function createSticker() {
         height: $(`#height`).val(),
         text: $(`#text`).val(),
         quantity: $(`#quantity`).val(),
-        price: $(`#material`).val(),
+        price: $(`#price`).val(),
         form: $(`#material`).val(),
-        img: repo.path,
+        img: path,
         additionalImg: "/assets/img/stickers/NotFound.png",
         categoryID: $(`#selectCategory`).val()
     }
+    console.log("Sticker: " + sticker);
 
     // отправляет запрос и получаем ответ
     const response = await fetch("../api/Stickers/Create", {
         method: "POST",
-        headers: { "Content-type": "application/json" },
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + sessionStorage.getItem("accessToken")
+        },
         body: JSON.stringify(sticker)
     });
     // получаем данные 
@@ -544,10 +512,11 @@ async function createSticker() {
 
     // если запрос прошел нормально
     if (response.ok === true) {
-        console.log(data);
+        // сохраняем в хранилище sessionStorage токен доступа
+        console.log(response);
     }
     else {
+        // если произошла ошибка, из errorText получаем текст ошибки
         console.log("Error: ", response.status);
     }
-    console.log("File : " + repo.path + " is uploaded successfully");
 }

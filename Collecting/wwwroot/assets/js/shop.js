@@ -125,7 +125,7 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
         newUrl = "../api/Stickers/PageInCategory/" + idCategory + "/" + currentPage + "/" + quantityPerPage;
     else
         newUrl = "../api/Stickers/Search/" + $('#search2').val();
-
+    //../assets/img/stickers/637882351708907872.png
     // Отправка запроса на сервер
     $.ajax({
         type: 'GET',
@@ -134,7 +134,9 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
         // После получения ответа сервера
         success: function (labels) {
             var content = '';
+            $('#stickers').html(content);
             for (let i = 0; i < labels.length; i++) {
+                //console.log(labels[i]["img"]);
                 content = `
                         <div class="col-sm-6 col-xl-4">
                           <!--== Start Shop Item ==-->
@@ -142,7 +144,7 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
                             <div class="inner-content">
                               <div class="product-thumb">
                                 <a href="single-product-simple.html">
-                                  <img class="w-100" src="assets/img/shop/17.jpg" alt="Image-HasTech">
+                                  <img class="w-100" src="${labels[i]["img"]}" alt="Image-HasTech">
                                 </a>
                                 <div class="product-action">
                                   <div class="addto-wrap">
@@ -167,46 +169,8 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
                           </div>
                           <!--== End Shop Item ==-->
                         </div>`
-                        /* content += `
-                        <div class="col-sm-6 col-xl-4">
-                          <!--== Start Shop Item ==-->
-                          <div class="product-item">
-                            <div class="inner-content">
-                              <div class="product-thumb">
-                                <a href="single-product-simple.html">
-                                  <img class="w-100" src="assets/img/shop/17.jpg" alt="Image-HasTech">
-                                </a>
-                                <div class="product-action">
-                                  <div class="addto-wrap">
-                                    <a class="add-cart" href="cart.html">
-                                      <i class="zmdi zmdi-shopping-cart-plus icon"></i>
-                                    </a>
-                                    <a class="add-quick-view" href="javascript:wow(0);">
-                                      <i class="zmdi zmdi-search icon"></i>
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="product-desc">
-                                <div class="product-info">
-                                  <h4 class="title"><a href="single-product-simple.html">This is the large title for testing large title</a></h4>
-                                  <div class="prices">
-                                    <span class="price">$17.00</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <!--== End Shop Item ==-->
-                        </div>`*/
-
                 $('#stickers').append(content); 
             }
-            /*
-            $('#aca').attr('hrev', `javascript:AddToCart(${labels[0]["id"]}, 1)`);
-            $('#aqw').attr('hrev', `javascript:wow(${labels[0]["id"]})`);
-            $('#title').text(`${labels[0]["firm"]}`);
-            $('#price').text(`${labels[0]["price"]} sticker`);*/
         }
     });
 }
@@ -248,47 +212,6 @@ function AddToCart(id, quantity) {
 }
 
 function wow(id) {
-    console.log("wow 1");
-    // Отправка запроса на сервер
-    /*let content = `
-        <div class="product-quick-view-inner">
-            <div class="product-quick-view-content">
-                <button type="button" class="btn-close">
-                    <span class="close-icon"><i class="fa fa-close"></i></span>
-                </button>
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-12">
-                        <div class="thumb">
-                            <img src="assets/img/shop/quick-view1.jpg" alt="Alan-Shop">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-12">
-                            <div class="content">
-                                <h4 class="title">33</h4>
-                                <div class="prices">
-                                    <span class="price">33 sticker</span>
-                                </div>
-                                <table>
-                                <tr><th>Year</th><th>Country</th><th>Material</th></tr>
-                                <tr><td>3</td><td>333</td><td>1</td></tr>
-                                <tr><th>Width</th><th>Height</th><th>Max quantity</th></tr>
-                                <tr><td>3</td><td>1</td><td>1</td></tr>
-                                <tr><th>Form</th><th>Text</th><th>Category</th></tr>
-                                <tr><td>3</td><td>1</td><td>1</td></tr>
-                                </table>
-                                <div class="btn-sign-container">
-                                    <a class="btn-sign" href="javascript:getNotification()">To your personal account</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="canvas-overlay"></div>
-    `;*/
-    /*
     // Отправка запроса на сервер
     $.ajax({
         type: 'GET',
@@ -299,7 +222,6 @@ function wow(id) {
         url: "../api/Stickers/Sticker/" + id,
         // После получения ответа сервера
         success: function (sticker) {
-            console.log("wow 2");
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -318,7 +240,7 @@ function wow(id) {
                                 <div class="row">
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="thumb">
-                                            <img src="assets/img/shop/quick-view1.jpg" alt="Alan-Shop">
+                                            <img src="${sticker.img}" width="480" height="480" alt="Alan-Shop">
                                             </div>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-12">
@@ -351,67 +273,16 @@ function wow(id) {
                             <div class="canvas-overlay"></div>
                         `;
                     $('#popUp').html(content);
-                    console.log("wow 3");
                 }
             });
         }
     });
 
-    //$('#popUp').html(content);                
-
-    var popupProduct = $(".product-quick-view-modal");
-
-    $(".btn-close, .canvas-overlay").on('click', function() {
-        popupProduct.removeClass('active');
-        $("body").removeClass("fix");
-    });*/
-
-    // Отправка запроса на сервер
-    let content = `
-        <div class="product-quick-view-inner">
-            <div class="product-quick-view-content">
-                <button type="button" class="btn-close">
-                    <span class="close-icon"><i class="fa fa-close"></i></span>
-                </button>
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-12">
-                        <div class="thumb">
-                            <img src="assets/img/shop/quick-view1.jpg" alt="Alan-Shop">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-12">
-                            <div class="content">
-                                <h4 class="title">33</h4>
-                                <div class="prices">
-                                    <span class="price">33 sticker</span>
-                                </div>
-                                <table>
-                                <tr><th>Year</th><th>Country</th><th>Material</th></tr>
-                                <tr><td>3</td><td>333</td><td>1</td></tr>
-                                <tr><th>Width</th><th>Height</th><th>Max quantity</th></tr>
-                                <tr><td>3</td><td>1</td><td>1</td></tr>
-                                <tr><th>Form</th><th>Text</th><th>Category</th></tr>
-                                <tr><td>3</td><td>1</td><td>1</td></tr>
-                                </table>
-                                <div class="btn-sign-container">
-                                    <a class="btn-sign" href="javascript:getNotification()">To your personal account</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="canvas-overlay"></div>
-    `;
-
-    $('#popUp').html(content);
-
-    var popupProduct = $(".product-quick-view-modal");
-
+    $(".product-quick-view-modal").addClass('active');
+    $("body").addClass("fix");
+    
     $(".btn-close, .canvas-overlay").on('click', function () {
-        popupProduct.removeClass('active');
+        $(".product-quick-view-modal").removeClass('active');
         $("body").removeClass("fix");
     });
 }

@@ -391,8 +391,8 @@ namespace Collecting.Controllers
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("Sticker", new { id = sticker.Id }, sticker);
             }
-
-            return BadRequest("Некорректные данные");
+            return NotFound();
+            //return BadRequest("Некорректные данные");
         }
 
         // PUT: Stickers/Edit

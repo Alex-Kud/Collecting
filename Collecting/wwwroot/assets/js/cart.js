@@ -11,20 +11,22 @@ function getCart() {
         success: function (labels) {
             var content = '';
             $('#productsInCart').html(content);
-            if (labels["items"].length == 0) {
+            if (labels.items.length == 0) {
                 $('#emptyCart').html("<span>Your shopping cart is still empty.</span><a href=\"shop.html\">Go shopping ?</a>")
                 $('#cartList').css("display", "none");
             }
             else {
                 $('#emptyCart').css("display", "none");
                 $('#cartList').css("display", "block");
-                for (let i = 0; i < labels["items"].length; i++) {
+                for (let i = 0; i < labels.items.length; i++) {
+                    console.log(labels);
+                    console.log(labels["items"][i]["sticker"]["img"]);
                     content += `<tr>`
                     content += `    <td class="indecor-product-remove">`
                     content += `        <a href="javascript:removeItem(${labels["items"][i]["id"]})"> <i class="fa fa-times"></i></a>`
                     content += `    </td>`
                     content += `    <td class="indecor-product-thumbnail" >`
-                    content += `        <a href="#/"><img src="assets/img/shop/cart/table1.jpg" alt="Image-HasTech"></a>`
+                    content += `        <a><img width="60" height="60" src="${labels["items"][i]["sticker"]["img"]}" alt="Image-HasTech"></a>`
                     content += `    </td>`
                     content += `    <td class="indecor-product-name">`
                     content += `        <h4 class="title"> <a href="single-product.html">${labels["items"][i]["sticker"]["firm"]}</a></h4>`
