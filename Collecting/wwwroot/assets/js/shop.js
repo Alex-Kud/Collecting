@@ -142,8 +142,8 @@ function getPage(idCategory, currentPage, quantityPerPage, type) {
                           <!--== Start Shop Item ==-->
                           <div class="product-item">
                             <div class="inner-content">
-                              <div class="product-thumb">
-                                <a href="single-product-simple.html">
+                              <div class="product-thumb" style="height: 300px; display: flex; justify-content: center; align-items: end">
+                                <a>
                                   <img class="w-100" src="${labels[i]["img"]}" alt="Image-HasTech">
                                 </a>
                                 <div class="product-action">
