@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Collecting.Controllers
 {
+    /// <summary>
+    /// Контроллер действий над категориями
+    /// </summary>
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
@@ -14,6 +17,12 @@ namespace Collecting.Controllers
     {
         private readonly StickersContext _context;
         private readonly IWebHostEnvironment _appEnvironment;
+
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
+        /// <param name="appEnvironment">Контекст http</param>
         public StickersController(StickersContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
@@ -21,6 +30,10 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/All
+        /// <summary>
+        /// Получение списка наклеек
+        /// </summary>
+        /// <returns>Список наклеек</returns>
         [HttpGet]
         //[Authorize(Roles = "User, Admin")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> All()
@@ -53,6 +66,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/AllInCategory/id
+        /// <summary>
+        /// Получение всех наклеек в категории
+        /// </summary>
+        /// <param name="id">id категории</param>
+        /// <returns>Список наклеек в категории</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> AllInCategory(int id)
         {
@@ -87,6 +105,12 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/Page/{currentPage}/{pageSize}
+        /// <summary>
+        /// Получение страницы товаров
+        /// </summary>
+        /// <param name="currentPage">Номер страницы</param>
+        /// <param name="pageSize">Размер страницы</param>
+        /// <returns></returns>
         [Route("{currentPage}/{pageSize}")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> Page(int currentPage, int pageSize)
@@ -132,6 +156,13 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/PageInCategory/{id}/{currentPage}/{pageSize}
+        /// <summary>
+        /// Получение страницы с фильтром категории
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [Route("{id}/{currentPage}/{pageSize}")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> PageInCategory(int? id, int currentPage, int pageSize)
@@ -189,6 +220,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/Sticker/5
+        /// <summary>
+        /// Получение стикера по id
+        /// </summary>
+        /// <param name="id">id стикера</param>
+        /// <returns>Стикер</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<StickerDTO>> Sticker(int? id)
         {
@@ -258,6 +294,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/Search/text
+        /// <summary>
+        /// Поиск стикеров по тексту
+        /// </summary>
+        /// <param name="text">Текст поиска</param>
+        /// <returns>Список стикеров с заданным текстом</returns>
         [HttpGet("{text}")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> Search(string text)
         {
@@ -292,6 +333,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/SearchQuantity/text
+        /// <summary>
+        /// Получение количества стикорв с заданным текстом
+        /// </summary>
+        /// <param name="text">Текст поиска</param>
+        /// <returns> Количество стикорв с заданным текстом</returns>
         [HttpGet("{text}")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> SearchQuantity(string text)
         {
@@ -313,6 +359,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Stickers/AllQuantityInCategory
+        /// <summary>
+        /// Получение количества стикеров в категории
+        /// </summary>
+        /// <param name="id">id категории</param>
+        /// <returns>Количество стикеров в категории</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> AllQuantityInCategory(int id)
         {
@@ -333,7 +384,11 @@ namespace Collecting.Controllers
             };
         }
 
-        // GET: Stickers/AllQuantityInCategory
+        // GET: Stickers/AllQuantity
+        /// <summary>
+        /// Получение общего количества стикеров
+        /// </summary>
+        /// <returns>Количество стикеров</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StickerDTO>>> AllQuantity()
         {
@@ -343,6 +398,11 @@ namespace Collecting.Controllers
             };
         }
 
+        /// <summary>
+        /// Загрузка изображений на сервер
+        /// </summary>
+        /// <param name="uploadedFile">Загружаемый файл</param>
+        /// <returns>Путь загруженного файла</returns>
         [HttpPost]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile uploadedFile)
         {
@@ -365,6 +425,11 @@ namespace Collecting.Controllers
         }
 
         // POST: Stickers/Create
+        /// <summary>
+        /// Создание стикера
+        /// </summary>
+        /// <param name="stickerDTO">Данный о стикере</param>
+        /// <returns>Созданный стикер</returns>
         [HttpPost]
         public async Task<IActionResult> Create(StickerDTO stickerDTO)
         {
@@ -391,11 +456,15 @@ namespace Collecting.Controllers
                 await _context.SaveChangesAsync();
                 return CreatedAtAction("Sticker", new { id = sticker.Id }, sticker);
             }
-            return NotFound();
-            //return BadRequest("Некорректные данные");
+            return BadRequest("Некорректные данные");
         }
 
         // PUT: Stickers/Edit
+        /// <summary>
+        /// Редактирование стикера
+        /// </summary>
+        /// <param name="stickerDto">Данный стикера</param>
+        /// <returns>Отредактированный стикер</returns>
         [HttpPut]
         public async Task<IActionResult> Edit(StickerDTO stickerDto)
         {
@@ -448,6 +517,11 @@ namespace Collecting.Controllers
         }
 
         // Delete: Stickers/Delete/5
+        /// <summary>
+        /// Удаление стикера
+        /// </summary>
+        /// <param name="id">id стикера</param>
+        /// <returns>Результат удаления стикера</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete(int? id)
         {

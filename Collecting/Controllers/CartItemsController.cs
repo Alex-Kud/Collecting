@@ -8,6 +8,9 @@ using System.Text.Json;
 
 namespace Collecting.Controllers
 {
+    /// <summary>
+    /// Контроллер действий над элементами корзины
+    /// </summary>
     [Authorize]
     [ApiController]
     [Produces("application/json")]
@@ -17,6 +20,11 @@ namespace Collecting.Controllers
         private readonly StickersContext _context;
         private readonly User _user;
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
+        /// <param name="httpContextAccessor">Контекст http</param>
         public CartItemsController(StickersContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
@@ -24,6 +32,11 @@ namespace Collecting.Controllers
         }
 
         // GET: CartItems/CartItem/{id}
+        /// <summary>
+        /// Получение элемента корзины
+        /// </summary>
+        /// <param name="id">id элемента корзины</param>
+        /// <returns>Элемент корзины</returns>
         [HttpGet]
         public async Task<ActionResult<CartItem>> CartItem(int? id)
         {
@@ -47,14 +60,21 @@ namespace Collecting.Controllers
         }
 
         // POST: CartItems/Create/{stickerId}/{quantity}
+        /// <summary>
+        /// Создание элемента корзины
+        /// </summary>
+        /// <param name="stickerId">id стикера</param>
+        /// <param name="quantity">Кол-во стикеров</param>
+        /// <returns>Созданный элемент корзины</returns>
         [Route("{stickerId}/{quantity}")]
         [HttpPost]
         public async Task<IActionResult> Create(int stickerId, int quantity)
         {
             if (_user == null)
             {
-                return new JsonResult(new { message = "Неавторизован!" }) {
-                    StatusCode = StatusCodes.Status401Unauthorized 
+                return new JsonResult(new { message = "Неавторизован!" })
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
                 };
             }
 
@@ -99,11 +119,16 @@ namespace Collecting.Controllers
             }
 
             await _context.SaveChangesAsync();
-            
+
             return CreatedAtAction("CartItem", new { id = cartItem.Id }, cartItem);
         }
 
         // DELETE: CartItems/Delete/5
+        /// <summary>
+        /// Удаление элемента корзины
+        /// </summary>
+        /// <param name="id">id элемента корзины</param>
+        /// <returns>Результат удаления</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -128,6 +153,12 @@ namespace Collecting.Controllers
         }
 
         // POST: CartItems/ChangeQuantity/{itemId}/{quantity}
+        /// <summary>
+        /// Изменение количества товара в элементе корзины
+        /// </summary>
+        /// <param name="itemId">id элемента корзины</param>
+        /// <param name="quantity">Новое количествотовара в элементе корзины</param>
+        /// <returns>Обновленный элемент корзины</returns>
         [HttpPost]
         [Route("{itemId}/{quantity}")]
         public async Task<IActionResult> ChangeQuantity(int? itemId, int quantity)

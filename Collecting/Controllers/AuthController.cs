@@ -22,6 +22,11 @@ namespace Collecting.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Получение токена авторизации
+        /// </summary>
+        /// <param name="data">Логин и пароль</param>
+        /// <returns>Токен авторизации</returns>
         [AllowAnonymous]
         [HttpPost(nameof(Auth))]
         public IActionResult Auth(Login data)
@@ -35,6 +40,10 @@ namespace Collecting.Controllers
             return BadRequest("Пожалуйста, введите действительное имя пользователя и пароль");
         }
 
+        /// <summary>
+        /// Получение результата авторизации
+        /// </summary>
+        /// <returns>Результат авторизации</returns>
         [Authorize]
         [HttpGet(nameof(GetResult))]
         public IActionResult GetResult() => Ok("Всё ок");

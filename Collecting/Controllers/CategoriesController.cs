@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Collecting.Controllers
 {
+    /// <summary>
+    /// Контроллер действий над категориями
+    /// </summary>
     [ApiController]
     [Produces("application/json")]
     [Route("api/[controller]/[action]")]
@@ -15,12 +18,20 @@ namespace Collecting.Controllers
     {
         private readonly StickersContext _context;
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
         public CategoriesController(StickersContext context)
         {
             _context = context;
         }
 
         // GET: Categories/All
+        /// <summary>
+        /// Получение всех категорий
+        /// </summary>
+        /// <returns>Список категорий</returns>
         [HttpGet]
         //[Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<CategoryDTO>>> All()
@@ -40,6 +51,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Categories/Category/5
+        /// <summary>
+        /// Получение категоии по id
+        /// </summary>
+        /// <param name="id">id категории</param>
+        /// <returns>Категория</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoryDTO>> Category(int? id)
         {
@@ -73,6 +89,11 @@ namespace Collecting.Controllers
         }
 
         // POST: Categories/Create
+        /// <summary>
+        /// Создание категории
+        /// </summary>
+        /// <param name="categoryDTO">Данные категории</param>
+        /// <returns>Созданная категория</returns>
         [HttpPost]
         public async Task<IActionResult> Create(CategoryDTO categoryDTO)
         {
@@ -92,6 +113,12 @@ namespace Collecting.Controllers
         }
 
         // POST: Categories/Edit/5
+        /// <summary>
+        /// Редактирование категории
+        /// </summary>
+        /// <param name="id">id категории</param>
+        /// <param name="categoryDto">Новые данные категории</param>
+        /// <returns>Измененная категория</returns>
         [HttpPost("{id}")]
         public async Task<IActionResult> Edit(int id, CategoryDTO categoryDto)
         {
@@ -128,6 +155,11 @@ namespace Collecting.Controllers
         }
 
         // POST: Categories/Delete/5
+        /// <summary>
+        /// Удаление категории
+        /// </summary>
+        /// <param name="id">id категории</param>
+        /// <returns>Результат удаления</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete(int? id)
         {

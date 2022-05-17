@@ -8,6 +8,9 @@ using System.Text.Json;
 
 namespace Collecting.Controllers
 {
+    /// <summary>
+    /// Контроллер действий над корзиной товаров
+    /// </summary>
     [Authorize]
     [ApiController]
     [Produces("application/json")]
@@ -17,6 +20,11 @@ namespace Collecting.Controllers
         private readonly StickersContext _context;
         private readonly User _user;
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="context">Контекст БД</param>
+        /// <param name="httpContextAccessor">Контекст http</param>
         public CartsController(StickersContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
@@ -24,6 +32,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Carts/Cart/5
+        /// <summary>
+        /// Получение корзины по id
+        /// </summary>
+        /// <param name="id">id корзины</param>
+        /// <returns>Корзина</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Cart>> Cart(int? id)
         {
@@ -54,6 +67,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Carts/TotalPrice/5
+        /// <summary>
+        /// Получение общей стоимости корзины по id
+        /// </summary>
+        /// <param name="id">id корзины</param>
+        /// <returns>Общая стоимость корзины</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult> TotalPrice(int? id)
         {
@@ -80,6 +98,11 @@ namespace Collecting.Controllers
         }
 
         // GET: Carts/Quantity/5
+        /// <summary>
+        /// Получение количества элементов в корзине по id
+        /// </summary>
+        /// <param name="id">id корзины</param>
+        /// <returns>Количество элементов в корзине</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult> Quantity(int? id)
         {
@@ -99,6 +122,10 @@ namespace Collecting.Controllers
         }
 
         // GET: Carts/CartUser
+        /// <summary>
+        /// Получение корзины авторизованного пользователя
+        /// </summary>
+        /// <returns>Корзина</returns>
         [HttpGet]
         public async Task<ActionResult<Cart>> CartUser()
         {
@@ -111,6 +138,10 @@ namespace Collecting.Controllers
         }
 
         // GET: Carts/TotalPriceUser
+        /// <summary>
+        /// Получение общей стоимости корзины авторизованного пользователя
+        /// </summary>
+        /// <returns>Общая стоимость корзины</returns>
         [HttpGet]
         public async Task<ActionResult> TotalPriceUser()
         {
@@ -123,6 +154,10 @@ namespace Collecting.Controllers
         }
 
         // GET: Carts/QuantityUser
+        /// <summary>
+        /// Получение общего количества элементов корзины авторизованного пользователя
+        /// </summary>
+        /// <returns>Количество элементов корзины</returns>
         [HttpGet]
         public async Task<ActionResult> QuantityUser()
         {
@@ -136,6 +171,10 @@ namespace Collecting.Controllers
         }
 
         // DELETE: Carts/Delete
+        /// <summary>
+        /// Удаление корзины
+        /// </summary>
+        /// <returns>Результат удаления корзины</returns>
         [HttpDelete]
         public async Task<IActionResult> Delete()
         {

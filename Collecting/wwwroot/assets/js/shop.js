@@ -266,7 +266,6 @@ function wow(id) {
                                                     <button class="btn btn-black" onclick="AddToCart(${sticker.id}, -1)">Add to cart</button>
                                                 </div>
                                             </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
