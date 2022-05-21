@@ -2,7 +2,6 @@
 using Collecting.Data;
 using Collecting.Data.DTO;
 using Collecting.Data.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -40,10 +39,11 @@ namespace Collecting.Controllers
             var categoriesDto = new List<CategoryDTO>();
             foreach (var category in categories)
             {
-                categoriesDto.Add(new CategoryDTO {
-                    Id = category.Id, 
-                    Name = category.Name, 
-                    Description = category.Description 
+                categoriesDto.Add(new CategoryDTO
+                {
+                    Id = category.Id,
+                    Name = category.Name,
+                    Description = category.Description
                 });
             }
 

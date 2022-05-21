@@ -27,7 +27,7 @@ namespace Collecting.Middleware
             {
                 AttachAccountToContext(context, userService, token);
             }
-            
+
             await _next.Invoke(context);
         }
 

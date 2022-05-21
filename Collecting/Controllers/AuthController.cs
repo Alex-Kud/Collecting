@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Text;
 
 namespace Collecting.Controllers
-{    
+{
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]

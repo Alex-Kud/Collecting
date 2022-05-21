@@ -374,11 +374,11 @@ namespace Collecting.Controllers
             }
             else
             {
-                 quant = await _context.StickersDb
-                 .Where(s => s.CategoryID == id)
-                 .CountAsync();
+                quant = await _context.StickersDb
+                .Where(s => s.CategoryID == id)
+                .CountAsync();
             }
-            return new JsonResult(new { quantity = quant})
+            return new JsonResult(new { quantity = quant })
             {
                 StatusCode = StatusCodes.Status200OK
             };
@@ -536,8 +536,9 @@ namespace Collecting.Controllers
             }
             _context.StickersDb.Remove(sticker);
             await _context.SaveChangesAsync();
-            return new JsonResult(new { message = "Удаление произошло успешно!" }) { 
-                StatusCode = StatusCodes.Status200OK 
+            return new JsonResult(new { message = "Удаление произошло успешно!" })
+            {
+                StatusCode = StatusCodes.Status200OK
             };
         }
 
